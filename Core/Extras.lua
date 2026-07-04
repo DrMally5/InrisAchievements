@@ -97,6 +97,43 @@ function Extras:Flex()
 end
 
 ----------------------------------------------------------------------
+-- Guild flex: post big earns to REAL guild chat, visible to every
+-- guildmate (addon or not). Epic+/hidden only, and staggered so a meta
+-- cascade (one kill completing several achievements) never spams.
+----------------------------------------------------------------------
+local flexQueue = {}
+local flexBusy = false
+
+local function PumpFlex()
+    if flexBusy then return end
+    local msg = table.remove(flexQueue, 1)
+    if not msg then return end
+    flexBusy = true
+    pcall(SendChatMessage, msg, "GUILD")
+    C_Timer.After(3, function() flexBusy = false; PumpFlex() end)
+end
+
+ns.Engine:RegisterCallback("COMPLETED", function(id, def)
+    if ns._suppressNotify then return end
+    if not ns.DB:Settings().guildFlex or not IsInGuild() then return end
+    if def.rarity < ns.RARITY.EPIC and not def.hidden then return end
+
+    local msg
+    if def.hidden then
+        msg = string.format(
+            "just discovered a hidden achievement: %s! [Inri's Achievements]",
+            def.name)
+    else
+        msg = string.format("just earned %s (%s, %d pts)%s [Inri's Achievements]",
+            def.name, Util.RarityName(def.rarity), def.points,
+            (def.title and def.title.text)
+                and (" and the title \"" .. def.title.text .. "\"") or "")
+    end
+    flexQueue[#flexQueue + 1] = msg
+    PumpFlex()
+end)
+
+----------------------------------------------------------------------
 -- Engine callbacks: screenshots, nudges, local first-marks
 ----------------------------------------------------------------------
 local nudged = {}   -- [achID] = true (session)

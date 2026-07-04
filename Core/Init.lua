@@ -145,8 +145,11 @@ local function HandleSlash(msg)
         elseif rest == "screenshot" then
             s.screenshot = not s.screenshot
             Util.Print("Auto-screenshots: " .. (s.screenshot and "ON" or "OFF"))
+        elseif rest == "guildflex" then
+            s.guildFlex = not s.guildFlex
+            Util.Print("Guild chat flex (Epic+): " .. (s.guildFlex and "ON" or "OFF"))
         else
-            Util.Print("Config: /ia config sound | toast | guild | announce | radar | screenshot")
+            Util.Print("Config: /ia config sound | toast | guild | announce | radar | screenshot | guildflex")
         end
 
     elseif cmd == "reset" then

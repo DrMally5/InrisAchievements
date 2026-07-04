@@ -16,6 +16,7 @@ local TOGGLES = {
     { key = "toast",      label = "Show achievement toasts" },
     { key = "toastSound", label = "Play toast sound" },
     { key = "announce",   label = "Chat announcements (yours and others')" },
+    { key = "guildFlex",  label = "Post Epic+ earns to guild chat (visible to everyone)" },
     { key = "shareGuild", label = "Share progress with guild" },
     { key = "radar",      label = "Rare Radar (alert when a needed mob is nearby)" },
     { key = "screenshot", label = "Auto-screenshot on Epic+ achievements" },

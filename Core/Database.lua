@@ -49,6 +49,7 @@ local function AccountDefaults()
             toast      = true,
             toastSound = true,
             announce   = true,   -- print a chat line when an achievement is earned
+            guildFlex  = true,   -- post Epic+/hidden earns to real guild chat
             radar      = true,   -- alert when a needed rare/named mob is nearby
             screenshot = true,   -- auto-screenshot on Epic+ earns
             shareGuild = true,
