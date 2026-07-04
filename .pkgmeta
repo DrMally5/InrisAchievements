@@ -1,0 +1,12 @@
+package-as: InrisAchievements
+
+enable-nolib-creation: no
+
+# Files that are part of the repo but should NOT ship inside the addon zip.
+ignore:
+  - .github
+  - .pkgmeta
+  - README.md
+  - CHANGELOG.md
+  - LICENSE
+  - "*.md"

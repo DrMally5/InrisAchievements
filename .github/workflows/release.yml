@@ -1,0 +1,21 @@
+name: Package and Release
+
+# Tag a commit (e.g. `git tag v1.0.0 && git push --tags`) to build the addon
+# and upload it to CurseForge (and attach a zip to a GitHub release).
+on:
+  push:
+    tags:
+      - "**"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v4
+
+      - name: Package and release
+        uses: BigWigsMods/packager@master
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}        # add this secret in repo settings
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}     # provided automatically

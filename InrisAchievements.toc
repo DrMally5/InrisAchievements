@@ -1,0 +1,83 @@
+## Interface: 11507
+## Title: Inri's Achievements!
+## Notes: A handcrafted achievement system for WoW Classic. Earn it, don't get it.
+## Author: Inri
+## Version: 1.0.0
+## SavedVariables: InrisAchievementsDB
+## SavedVariablesPerCharacter: InrisAchievementsCharDB
+## IconTexture: Interface\AddOns\InrisAchievements\Assets\Logo.tga
+## X-Category: Achievements
+## X-License: MIT
+## X-Website: https://github.com/CHANGEME/InrisAchievements
+## X-Curse-Project-ID: 000000
+
+#=========================================================
+# Localization
+#=========================================================
+Localization\enUS.lua
+
+#=========================================================
+# Core systems (load order matters)
+#=========================================================
+Core\Constants.lua
+Core\Util.lua
+Core\Database.lua
+Core\Engine.lua
+Core\Triggers.lua
+Core\Titles.lua
+Core\Extras.lua
+
+#=========================================================
+# Achievement definitions
+# (Adding a new achievement = edit ONE file in here)
+#=========================================================
+Definitions\Categories.lua
+Definitions\Ach_Leveling.lua
+Definitions\Ach_NamedNPCs.lua
+Definitions\Ach_Legends.lua
+Definitions\Ach_RareMobs.lua
+Definitions\Ach_EliteQuests.lua
+Definitions\Ach_Dungeons.lua
+Definitions\Ach_Speedrun.lua
+Definitions\Ach_Exploration.lua
+Definitions\Ach_Class.lua
+Definitions\Ach_Professions.lua
+Definitions\Ach_Reputation.lua
+Definitions\Ach_Hardcore.lua
+Definitions\Ach_Hidden.lua
+Definitions\Ach_Legendary.lua
+Definitions\Ach_Series.lua
+Definitions\Ach_Extra.lua
+Definitions\Ach_Horde.lua
+Definitions\Ach_Alliance.lua
+Definitions\Ach_Veteran.lua
+Definitions\Ach_PvP.lua
+
+#=========================================================
+# Game event wiring (after definitions are registered)
+#=========================================================
+Core\Events.lua
+
+#=========================================================
+# Networking
+#=========================================================
+Networking\Comm.lua
+
+#=========================================================
+# User Interface
+#=========================================================
+UI\Templates.xml
+UI\Toast.lua
+UI\MainFrame.lua
+UI\Inspect.lua
+UI\Titles.lua
+UI\BugReport.lua
+UI\Tracker.lua
+UI\Export.lua
+UI\Options.lua
+UI\Minimap.lua
+
+#=========================================================
+# Bootstrap (must be last)
+#=========================================================
+Core\Init.lua

@@ -1,0 +1,207 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
+<!--====================================================================
+    Reusable widget templates for Inri's Achievements!
+
+    Regions only - scripts and animations are wired up in Lua so behaviour
+    lives next to the code that drives it. Children are named $parent<X> and
+    fetched in Lua via _G[name.."<X>"].
+=====================================================================-->
+
+    <!-- ============================================================
+         Category list button (left column of the main window)
+    ============================================================= -->
+    <Button name="InriCategoryButtonTemplate" virtual="true">
+        <Size x="180" y="28"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg" setAllPoints="true">
+                    <Color r="1" g="1" b="1" a="0"/>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="$parentIcon" parentKey="icon">
+                    <Size x="20" y="20"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="6" y="0"/>
+                    </Anchors>
+                </Texture>
+                <FontString name="$parentLabel" parentKey="label" inherits="GameFontNormal" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.icon" relativePoint="RIGHT" x="8" y="0"/>
+                        <Anchor point="RIGHT" x="-6" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parentCount" parentKey="count" inherits="GameFontDisableSmall" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-8" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="selected" setAllPoints="true" alphaMode="ADD" file="Interface\QuestFrame\UI-QuestTitleHighlight">
+                    <Color r="0.2" g="0.5" b="0.9" a="0.35"/>
+                </Texture>
+            </Layer>
+        </Layers>
+        <HighlightTexture alphaMode="ADD" file="Interface\QuestFrame\UI-QuestTitleHighlight">
+            <Color r="1" g="1" b="1" a="0.25"/>
+        </HighlightTexture>
+    </Button>
+
+    <!-- ============================================================
+         Achievement row (right scroll list)
+    ============================================================= -->
+    <Button name="InriAchievementButtonTemplate" virtual="true">
+        <Size x="360" y="50"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg" setAllPoints="true" file="Interface\Buttons\WHITE8x8">
+                    <Color r="0.08" g="0.08" b="0.10" a="0.55"/>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture parentKey="rarity" file="Interface\Buttons\WHITE8x8">
+                    <Size x="3" y="50"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="BOTTOMLEFT"/>
+                    </Anchors>
+                    <Color r="1" g="1" b="1" a="1"/>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="$parentIcon" parentKey="icon">
+                    <Size x="40" y="40"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="8" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture name="$parentIconBorder" parentKey="iconBorder" file="Interface\Buttons\UI-Quickslot2">
+                    <Size x="56" y="56"/>
+                    <Anchors>
+                        <Anchor point="CENTER" relativeKey="$parent.icon" x="0" y="-1"/>
+                    </Anchors>
+                </Texture>
+                <FontString name="$parentName" parentKey="name" inherits="GameFontNormal" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" relativePoint="TOPRIGHT" x="10" y="2"/>
+                        <Anchor point="RIGHT" x="-44" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parentDesc" parentKey="desc" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="270" y="0"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.name" relativePoint="BOTTOMLEFT" x="0" y="-2"/>
+                    </Anchors>
+                    <Color r="0.8" g="0.8" b="0.8"/>
+                </FontString>
+                <FontString name="$parentPoints" parentKey="points" inherits="GameFontNormalLarge" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-10" y="6"/>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parentMeta" parentKey="meta" inherits="GameFontDisableSmall" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" x="-10" y="6"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <StatusBar name="$parentProgress" parentKey="progress" hidden="true">
+                <Size x="270" y="8"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.icon" relativePoint="BOTTOMRIGHT" x="10" y="2"/>
+                </Anchors>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0.2" g="0.6" b="1.0"/>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture setAllPoints="true" file="Interface\Buttons\WHITE8x8">
+                            <Color r="0" g="0" b="0" a="0.5"/>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="text" inherits="GameFontHighlightSmall">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </StatusBar>
+        </Frames>
+        <HighlightTexture alphaMode="ADD" file="Interface\Buttons\WHITE8x8">
+            <Color r="1" g="1" b="1" a="0.07"/>
+        </HighlightTexture>
+    </Button>
+
+    <!-- ============================================================
+         Toast notification
+    ============================================================= -->
+    <Frame name="InriToastTemplate" parent="UIParent" hidden="true" frameStrata="DIALOG" virtual="true" enableMouse="true">
+        <Size x="320" y="78"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg" setAllPoints="true" file="Interface\Buttons\WHITE8x8">
+                    <Color r="0.05" g="0.05" b="0.07" a="0.92"/>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture parentKey="rarity" file="Interface\Buttons\WHITE8x8">
+                    <Size x="320" y="3"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="TOPRIGHT"/>
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="rarityBottom" file="Interface\Buttons\WHITE8x8">
+                    <Size x="320" y="3"/>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT"/>
+                        <Anchor point="BOTTOMRIGHT"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="$parentIcon" parentKey="icon">
+                    <Size x="48" y="48"/>
+                    <Anchors>
+                        <Anchor point="LEFT" x="14" y="0"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture name="$parentIconBorder" parentKey="iconBorder" file="Interface\Buttons\UI-Quickslot2">
+                    <Size x="66" y="66"/>
+                    <Anchors>
+                        <Anchor point="CENTER" relativeKey="$parent.icon" x="0" y="-1"/>
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="heading" inherits="GameFontNormalSmall" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" relativePoint="TOPRIGHT" x="12" y="-2"/>
+                    </Anchors>
+                    <Color r="1" g="0.82" b="0"/>
+                </FontString>
+                <FontString parentKey="title" inherits="GameFontNormalLarge" justifyH="LEFT">
+                    <Size x="220" y="0"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.heading" relativePoint="BOTTOMLEFT" x="0" y="-3"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="points" inherits="GameFontNormal" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.title" relativePoint="BOTTOMLEFT" x="0" y="-3"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </Frame>
+
+</Ui>
