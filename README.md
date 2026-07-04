@@ -228,4 +228,4 @@ The foundation is built for it:
   achievements is just a few more integers.
 
 Future-ready hooks already designed for: guild achievements, seasonal/event
-achievements, account-wide progress, leaderboards, titles, and import/export.
+achievements, account-wide progress, and expanded leaderboards.

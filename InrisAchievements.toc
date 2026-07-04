@@ -73,7 +73,6 @@ UI\Inspect.lua
 UI\Titles.lua
 UI\BugReport.lua
 UI\Tracker.lua
-UI\Export.lua
 UI\Options.lua
 UI\Minimap.lua
 

@@ -40,15 +40,6 @@ local function HandleSlash(msg)
     elseif cmd == "flex" then
         ns.Extras:Flex()
 
-    elseif cmd == "export" then
-        ns.Export:Show()
-
-    elseif cmd == "import" then
-        -- The chat box caps input at 255 characters; real imports should be
-        -- pasted into the Export/Import window instead.
-        if rest ~= "" then ns.Export:Import(rest)
-        else ns.Export:Show() end
-
     elseif cmd == "verify" then
         -- Check the current target against every kill achievement. Used to
         -- confirm mob names in the database while leveling (see VERIFY flags).

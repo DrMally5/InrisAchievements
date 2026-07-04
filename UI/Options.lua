@@ -65,7 +65,7 @@ function Options:Register()
 
         local hint = panel:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
         hint:SetPoint("TOPLEFT", 16, y - 10)
-        hint:SetText("More commands: /ia  (help), /ia bug, /ia export, /ia titles")
+        hint:SetText("More commands: /ia  (help), /ia bug, /ia titles, /ia flex")
 
         local category = Settings.RegisterCanvasLayoutCategory(panel, panel.name)
         Settings.RegisterAddOnCategory(category)
