@@ -307,11 +307,6 @@ function DB:Prune()
         elseif p.c then
             points = points + Util.RarityPoints(def.rarity)
             count = count + 1
-            -- Backfill discovery credit for hidden achievements earned before
-            -- (or without) the discovery system hearing about them.
-            if def.hidden and self.char.meta.key then
-                self:RecordDiscovery(id, self.char.meta.key, p.t)
-            end
         end
     end
     self.char.points = points
@@ -405,6 +400,33 @@ function DB:RecordDiscovery(id, name, t)
     self.account.discoveries[id] = { name = name, t = t }
     if ns.UI then ns.UI:Refresh() end
     return true
+end
+
+----------------------------------------------------------------------
+-- Creator-account hygiene: the author mass-earned everything before release,
+-- which would have "discovered" every hidden achievement at once. To keep the
+-- community's discovery race pure, the creator's account holds ONLY
+-- "Make This Addon" among hidden achievements - the rest are shed at login
+-- (completions refunded, own-name discovery credits removed). Runs only when
+-- the account's battletag hash matches ns.CREATOR_HASH.
+----------------------------------------------------------------------
+function DB:CreatorHiddenScrub()
+    local own = {}
+    if self.char.meta.key then own[self.char.meta.key] = true end
+    for key in pairs(self.account.alts or {}) do own[key] = true end
+
+    for _, def in ipairs(ns.Achievements) do
+        if def.hidden and def.id ~= "hidden_creator" then
+            if self:IsCompleted(def.id) then
+                self:Uncomplete(def.id)
+            end
+            local d = self.account.discoveries[def.id]
+            if d and d.name and own[d.name] then
+                self.account.discoveries[def.id] = nil
+            end
+        end
+    end
+    if ns.UI then ns.UI:Refresh() end
 end
 
 ----------------------------------------------------------------------
