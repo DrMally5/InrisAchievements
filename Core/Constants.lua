@@ -104,3 +104,7 @@ ns.CREATOR_HASH = "af2930b8"
 -- The name the Creator achievement's discovery credit always displays,
 -- regardless of which of the author's characters earned it first.
 ns.CREATOR_NAME = "Inrii-Soulseeker"
+
+-- Inline gold star (the raid-target icon). The Unicode star U+2605 is NOT in
+-- WoW's default font and renders as an empty box - use this texture instead.
+ns.STAR_ICON = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t "

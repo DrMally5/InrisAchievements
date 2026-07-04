@@ -126,7 +126,7 @@ local function Populate(entry)
 
     if entry.titleText and entry.titleText ~= "" then
         local tc = Util.RarityColor(entry.titleRarity or 1)
-        frame.titleLine:SetText("\226\152\133 " .. entry.titleText)  -- star + title
+        frame.titleLine:SetText(ns.STAR_ICON .. entry.titleText)  -- star icon + title
         frame.titleLine:SetTextColor(tc[1], tc[2], tc[3])
     else
         frame.titleLine:SetText("")

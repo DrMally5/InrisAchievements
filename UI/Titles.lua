@@ -19,7 +19,7 @@ local Util = ns.Util
 local TitlesUI = {}
 ns.TitlesUI = TitlesUI
 
-local STAR = "\226\152\133 "   -- ★ (used only for the fallback overhead line)
+local STAR = ns.STAR_ICON   -- inline gold star texture (U+2605 isn't in WoW's font)
 
 -- Title to show for a unit (self uses the live active title; others the cache).
 local function TitleEntryForUnit(unit)

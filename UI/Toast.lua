@@ -203,7 +203,7 @@ local function Render(def)
     frame.title:SetText(def.name)
     frame.title:SetTextColor(c[1], c[2], c[3])
     local titleSuffix = (def.title and def.title.text)
-        and ("  |cffffd100\226\152\133 " .. def.title.text .. "|r") or ""
+        and ("  |cffffd100" .. ns.STAR_ICON .. def.title.text .. "|r") or ""
     frame.points:SetText(string.format("|cffffd100+%d %s|r  %s%s",
         def.points, L["POINTS_SUFFIX"], Util.Colorize(Util.RarityName(def.rarity), c), titleSuffix))
 
