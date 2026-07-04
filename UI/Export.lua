@@ -35,20 +35,27 @@ function Export:Import(str)
         return
     end
     local restored, unknown = 0, 0
+    -- Guarded so an error mid-import can never leave notifications
+    -- suppressed for the rest of the session.
     ns._suppressNotify = true
-    for id in body:gmatch("[^,%s]+") do
-        if ns.GetAchievement(id) then
-            if not ns.DB:IsCompleted(id) then
-                ns.Engine:CompleteAchievement(id)
-                restored = restored + 1
+    local ok, err = pcall(function()
+        for id in body:gmatch("[^,%s]+") do
+            if ns.GetAchievement(id) then
+                if not ns.DB:IsCompleted(id) then
+                    ns.Engine:CompleteAchievement(id)
+                    restored = restored + 1
+                end
+            else
+                unknown = unknown + 1
             end
-        else
-            unknown = unknown + 1
         end
-    end
+    end)
     ns._suppressNotify = false
     ns.DB:Prune()             -- recompute totals defensively
     if ns.UI then ns.UI:Refresh() end
+    if not ok then
+        Util.Print("|cffff4444Import error:|r " .. tostring(err))
+    end
     Util.Print(string.format("Import complete: %d restored, %d unknown ids skipped.",
         restored, unknown))
 end
@@ -58,7 +65,7 @@ end
 ----------------------------------------------------------------------
 local function BuildFrame()
     frame = CreateFrame("Frame", "InrisExportFrame", UIParent, "BackdropTemplate")
-    frame:SetSize(420, 190)
+    frame:SetSize(420, 372)
     frame:SetPoint("CENTER")
     frame:SetFrameStrata("DIALOG")
     frame:SetBackdrop({
@@ -79,14 +86,14 @@ local function BuildFrame()
     ribbon:SetPoint("TOP", 0, 26)
     local heading = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     heading:SetPoint("TOP", ribbon, "TOP", 0, -13)
-    heading:SetText("Export")
+    heading:SetText("Export / Import")
 
     local close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
     close:SetPoint("TOPRIGHT", -6, -6)
 
     local hint = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     hint:SetPoint("TOPLEFT", 24, -42)
-    hint:SetText("Ctrl+C to copy. Restore on another install with /ia import <string>.")
+    hint:SetText("Your progress string - press Ctrl+C to copy:")
 
     local box = CreateFrame("Frame", nil, frame, "BackdropTemplate")
     box:SetPoint("TOPLEFT", 24, -62)
@@ -115,6 +122,47 @@ local function BuildFrame()
     edit:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
     scroll:SetScrollChild(edit)
     frame.edit = edit
+
+    -- Import: paste a string here (the chat box caps slash commands at 255
+    -- characters, so real imports must come through this window).
+    local hint2 = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    hint2:SetPoint("TOPLEFT", 24, -172)
+    hint2:SetText("Paste a string below (Ctrl+V) to restore progress:")
+
+    local inBox = CreateFrame("Frame", nil, frame, "BackdropTemplate")
+    inBox:SetPoint("TOPLEFT", 24, -190)
+    inBox:SetSize(372, 110)
+    inBox:SetBackdrop({
+        bgFile   = "Interface\\Buttons\\WHITE8x8",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        tile = true, tileSize = 8, edgeSize = 12,
+        insets = { left = 3, right = 3, top = 3, bottom = 3 },
+    })
+    inBox:SetBackdropColor(0, 0, 0, 0.5)
+    inBox:SetBackdropBorderColor(0.6, 0.5, 0.3)
+
+    local inScroll = CreateFrame("ScrollFrame", nil, inBox, "UIPanelScrollFrameTemplate")
+    inScroll:SetPoint("TOPLEFT", 6, -6)
+    inScroll:SetPoint("BOTTOMRIGHT", -26, 6)
+    local inEdit = CreateFrame("EditBox", nil, inScroll)
+    inEdit:SetMultiLine(true)
+    inEdit:SetFontObject(ChatFontNormal)
+    inEdit:SetWidth(336)
+    inEdit:SetAutoFocus(false)
+    inEdit:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+    inScroll:SetScrollChild(inEdit)
+    inBox:EnableMouse(true)
+    inBox:SetScript("OnMouseUp", function() inEdit:SetFocus() end)
+    frame.importEdit = inEdit
+
+    local importBtn = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
+    importBtn:SetSize(110, 24)
+    importBtn:SetPoint("BOTTOMRIGHT", -24, 18)
+    importBtn:SetText("Import")
+    importBtn:SetScript("OnClick", function()
+        Export:Import(frame.importEdit:GetText())
+        frame.importEdit:SetText("")
+    end)
 end
 
 function Export:Show()

@@ -806,7 +806,9 @@ function UI:OpenToAchievement(id)
     if not def then return end
     if not frame then BuildFrame() end
     frame:Show()
-    self:SelectCategory(def.category)
+    -- Hidden achievements are only listed in the Hidden tab, regardless of
+    -- their nominal category.
+    self:SelectCategory(def.hidden and "HIDDEN" or def.category)
 
     -- Scroll so the achievement is visible.
     local list = self._list or BuildList()

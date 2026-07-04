@@ -44,8 +44,10 @@ local function HandleSlash(msg)
         ns.Export:Show()
 
     elseif cmd == "import" then
+        -- The chat box caps input at 255 characters; real imports should be
+        -- pasted into the Export/Import window instead.
         if rest ~= "" then ns.Export:Import(rest)
-        else Util.Print("Usage: /ia import IA1:...") end
+        else ns.Export:Show() end
 
     elseif cmd == "verify" then
         -- Check the current target against every kill achievement. Used to
