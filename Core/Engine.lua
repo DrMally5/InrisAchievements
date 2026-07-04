@@ -89,6 +89,15 @@ function ns.RegisterAchievement(def)
     -- Sensible defaults so definitions stay terse.
     def.rarity       = def.rarity or ns.RARITY.COMMON
     def.icon         = def.icon or ns.DEFAULT_ICON
+
+    -- Guard against icon paths that don't exist in this client (they would
+    -- render as blank squares): fall back to the question mark and remember
+    -- the bad path so /ia icons can report it.
+    if GetFileIDFromPath and def.icon ~= ns.DEFAULT_ICON
+       and not GetFileIDFromPath(def.icon) then
+        def.iconMissing = def.icon
+        def.icon = ns.DEFAULT_ICON
+    end
     def.points       = Util.RarityPoints(def.rarity)
     def.progressType = def.progressType or ns.PROGRESS.BOOLEAN
     def.conditions   = def.conditions or {}

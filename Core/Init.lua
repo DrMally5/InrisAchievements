@@ -40,6 +40,32 @@ local function HandleSlash(msg)
     elseif cmd == "flex" then
         ns.Extras:Flex()
 
+    elseif cmd == "icons" then
+        -- Audit every icon path against the client's file database.
+        if not GetFileIDFromPath then
+            Util.Print("This client cannot verify file paths.")
+        else
+            local bad = 0
+            for _, def in ipairs(ns.Achievements) do
+                if def.iconMissing then
+                    bad = bad + 1
+                    Util.Print("|cffff4040missing:|r " .. def.id .. " -> " .. def.iconMissing)
+                end
+            end
+            for _, cat in ipairs(ns.Categories) do
+                if cat.icon and not GetFileIDFromPath(cat.icon) then
+                    bad = bad + 1
+                    Util.Print("|cffff4040missing (category):|r " .. cat.key .. " -> " .. cat.icon)
+                end
+            end
+            if not GetFileIDFromPath(ns.LOGO) then
+                bad = bad + 1
+                Util.Print("|cffff4040missing:|r addon logo -> " .. ns.LOGO)
+            end
+            Util.Print(bad == 0 and "All icons OK."
+                or (bad .. " bad icon path(s) - they show as '?' until fixed."))
+        end
+
     elseif cmd == "verify" then
         -- Check the current target against every kill achievement. Used to
         -- confirm mob names in the database while leveling (see VERIFY flags).
