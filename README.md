@@ -5,7 +5,7 @@ feel like something Blizzard could have shipped at launch. Every achievement is
 meant to represent a genuine accomplishment — *"I actually earned this"* — never
 a participation trophy.
 
-> 247 hand-written achievements across 12 categories, fully data-driven and
+> 246 hand-written achievements across 12 categories, fully data-driven and
 > built to scale to 400+ without touching core logic. 37 wearable **titles**,
 > **Saga meta-chains**, hidden achievements with first-discoverer credit,
 > guild leaderboard, speed runs, Rare Radar, and peer-to-peer sync.
