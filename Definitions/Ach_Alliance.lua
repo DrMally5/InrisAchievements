@@ -36,9 +36,9 @@ Legend("leg_olsooty",   "Ol' Sooty",         "Ol' Sooty",         R.COMMON, "Int
 ----------------------------------------------------------------------
 -- Teldrassil & Darkshore
 ----------------------------------------------------------------------
-Legend("leg_melenas",   "Fall of the Satyr", "Lord Melenas",      R.COMMON, "Interface\\Icons\\Spell_Shadow_SoulLeech_3",    "Kalimdor Shores")
+Legend("leg_melenas",   "Fall of the Satyr", "Lord Melenas",      R.COMMON, "Interface\\Icons\\Spell_Shadow_SummonSuccubus",    "Kalimdor Shores")
 Legend("leg_ursal",     "Ursal the Mauler",  "Ursal the Mauler",  R.COMMON, "Interface\\Icons\\Ability_Druid_Maul",          "Kalimdor Shores")
-Legend("leg_sathrah",   "Lady Sathrah",      "Lady Sathrah",      R.COMMON, "Interface\\Icons\\Ability_Hunter_Pet_Spider",   "Kalimdor Shores")
+Legend("leg_sathrah",   "Lady Sathrah",      "Lady Sathrah",      R.COMMON, "Interface\\Icons\\Spell_Nature_Web",   "Kalimdor Shores")
 Legend("leg_blackmoss", "Blackmoss the Fetid","Blackmoss the Fetid", R.RARE, "Interface\\Icons\\Spell_Nature_NullifyDisease", "Kalimdor Shores")  -- VERIFY
 
 ----------------------------------------------------------------------

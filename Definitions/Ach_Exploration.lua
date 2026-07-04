@@ -70,7 +70,7 @@ A{
     description = "Reach the lonely southern shore of Land's End Beach in Tanaris.",
     category = "EXPLORATION", subcategory = "Hidden",
     rarity = R.COMMON, trigger = "EXPLORE",
-    icon = "Interface\\Icons\\INV_Misc_Shell_04",
+    icon = "Interface\\Icons\\INV_Misc_Fish_04",
     conditions = { zones = { "Land's End Beach" } },
 }
 

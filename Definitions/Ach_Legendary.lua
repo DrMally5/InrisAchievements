@@ -46,7 +46,7 @@ Slayer("leg_cthun",    "Eye of the Old God",
 
 Slayer("leg_kelthuzad","End of the Scourge",
     "Destroy Kel'Thuzad in the necropolis of Naxxramas.",
-    "Kel'Thuzad", 15990, R.LEGENDARY, "Interface\\Icons\\Spell_Frost_Frost")
+    "Kel'Thuzad", 15990, R.LEGENDARY, "Interface\\Icons\\Spell_Frost_FrostNova")
 
 ----------------------------------------------------------------------
 -- The Emerald Dragons (roaming world bosses)
@@ -80,7 +80,7 @@ Slayer("leg_mandokir", "Ohgan's Revenge",
 
 Slayer("leg_jindo", "The Hexxer Hexed",
     "Defeat Jin'do the Hexxer in Zul'Gurub.",
-    "Jin'do the Hexxer", 11380, R.RARE, "Interface\\Icons\\Spell_Shadow_Hex")
+    "Jin'do the Hexxer", 11380, R.RARE, "Interface\\Icons\\Spell_Shadow_CurseOfMannoroth")
 
 Slayer("leg_thekal", "Tiger King",
     "Defeat High Priest Thekal in Zul'Gurub.",
@@ -102,7 +102,7 @@ Slayer("leg_buru", "Pop the Gorger",
 ----------------------------------------------------------------------
 Slayer("leg_vael", "Too Hot to Handle",
     "Defeat Vaelastrasz the Corrupt in Blackwing Lair.",
-    "Vaelastrasz the Corrupt", 13020, R.EPIC, "Interface\\Icons\\INV_Misc_Head_Dragon_Red")
+    "Vaelastrasz the Corrupt", 13020, R.EPIC, "Interface\\Icons\\Spell_Fire_Immolation")
 
 Slayer("leg_patchwerk", "Patchwerk Wants to Play",
     "Defeat Patchwerk in Naxxramas.",

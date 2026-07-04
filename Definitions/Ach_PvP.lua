@@ -35,7 +35,7 @@ A{
     category = "PVP", subcategory = "Killing Blows",
     rarity = R.EPIC, trigger = "PVPKILL",
     progressType = P.COUNTER, target = 100,
-    icon = "Interface\\Icons\\Ability_Warrior_BloodFrenzy",
+    icon = "Interface\\Icons\\Spell_Shadow_BloodBoil",
     conditions = {},
 }
 

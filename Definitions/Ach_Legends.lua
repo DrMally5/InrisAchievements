@@ -41,7 +41,7 @@ Legend("leg_mograine",  "Scarlet Commander Mograine", "Scarlet Commander Mograin
 ----------------------------------------------------------------------
 Legend("leg_bangalash", "King Bangalash",      "King Bangalash",   R.RARE, "Interface\\Icons\\Ability_Hunter_Pet_Cat",     "Great Beasts")
 Legend("leg_mukla",     "King Mukla",          "King Mukla",       R.RARE, "Interface\\Icons\\Ability_Hunter_Pet_Gorilla", "Great Beasts")
-Legend("leg_kingmosh",  "King Mosh",           "King Mosh",        R.EPIC, "Interface\\Icons\\Ability_Hunter_Pet_Devilsaur","Great Beasts")
+Legend("leg_kingmosh",  "King Mosh",           "King Mosh",        R.EPIC, "Interface\\Icons\\INV_Misc_MonsterClaw_04","Great Beasts")
 Legend("leg_arugalson", "Son of Arugal",       "Son of Arugal",    R.RARE, "Interface\\Icons\\Spell_Shadow_ShadowWordDominate", "Great Beasts")
 
 ----------------------------------------------------------------------

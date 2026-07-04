@@ -29,7 +29,7 @@ A{
     category = "RARES", subcategory = "The Hunt",
     rarity = R.COMMON, trigger = "KILL",
     progressType = P.COUNTER, target = 10,
-    icon = "Interface\\Icons\\Ability_Hunter_MarkedForDeath",
+    icon = "Interface\\Icons\\Ability_Hunter_SniperShot",
     conditions = { classification = RARE_CLASS },
 }
 
@@ -49,7 +49,7 @@ A{
     category = "RARES", subcategory = "The Hunt",
     rarity = R.EPIC, trigger = "KILL",
     progressType = P.COUNTER, target = 100,
-    icon = "Interface\\Icons\\Ability_Druid_PrimalTenacity",
+    icon = "Interface\\Icons\\INV_Misc_MonsterClaw_03",
     conditions = { classification = RARE_CLASS },
 }
 

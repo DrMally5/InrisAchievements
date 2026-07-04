@@ -44,7 +44,7 @@ Legend("leg_teremus",   "Devourer Devoured",  "Teremus the Devourer",R.EPIC, "In
 ----------------------------------------------------------------------
 -- Scarlet Monastery, completed (feeds The Scarlet Executioner saga)
 ----------------------------------------------------------------------
-Legend("leg_doan",      "Arcanist Doan",      "Arcanist Doan",       R.COMMON, "Interface\\Icons\\Spell_Arcane_Blast",      "Scarlet Crusade")
+Legend("leg_doan",      "Arcanist Doan",      "Arcanist Doan",       R.COMMON, "Interface\\Icons\\Spell_Nature_WispSplode",      "Scarlet Crusade")
 Legend("leg_loksey",    "Houndmaster",        "Houndmaster Loksey",  R.COMMON, "Interface\\Icons\\Ability_Hunter_BeastCall", "Scarlet Crusade")
 
 ----------------------------------------------------------------------
@@ -95,6 +95,6 @@ A{
     description = "Set foot on the Ironforge Airfield, high above Dun Morogh.",
     category = "EXPLORATION", subcategory = "Secrets",
     rarity = R.EPIC, trigger = "EXPLORE", hidden = true,
-    icon = "Interface\\Icons\\INV_Misc_MissileLarge_Red",
+    icon = "Interface\\Icons\\INV_Misc_Bomb_04",
     conditions = { zones = { "Ironforge Airfield", "Dun Morogh Airfield" } },   -- VERIFY
 }

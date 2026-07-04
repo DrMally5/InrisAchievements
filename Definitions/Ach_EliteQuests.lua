@@ -36,7 +36,7 @@ A{
     description = "Defeat the centaur Maraudos in Desolace at level 40 or below.",
     category = "ELITE_QUESTS", subcategory = "Kalimdor",
     rarity = R.COMMON, trigger = "KILL",
-    icon = "Interface\\Icons\\Ability_Hunter_Pet_DragonHawk",
+    icon = "Interface\\Icons\\INV_Spear_06",
     conditions = { mobNames = { "Maraudos" }, maxPlayerLevel = 40 },
 }
 
@@ -63,7 +63,7 @@ A{
     description = "Defeat Antu'sul in Zul'Farrak at level 46 or below.",
     category = "ELITE_QUESTS", subcategory = "Kalimdor",
     rarity = R.RARE, trigger = "KILL",
-    icon = "Interface\\Icons\\Ability_Hunter_Pet_Spider",
+    icon = "Interface\\Icons\\Spell_Nature_Web",
     conditions = { mobNames = { "Antu'sul" }, maxPlayerLevel = 46 },
 }
 

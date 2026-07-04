@@ -33,7 +33,7 @@ end
 ----------------------------------------------------------------------
 Legend("leg_sarkoth",  "Sarkoth",            "Sarkoth",          R.COMMON, "Interface\\Icons\\Ability_Hunter_Pet_Scorpid", "Durotar")
 Legend("leg_gazzuz",   "Burning Blade",      "Gazz'uz",          R.COMMON, "Interface\\Icons\\Spell_Fire_Fireball",         "Durotar")   -- VERIFY
-Legend("leg_zalazane", "Free the Isles!",    "Zalazane",         R.RARE,   "Interface\\Icons\\Spell_Shadow_Hex",            "Durotar")
+Legend("leg_zalazane", "Free the Isles!",    "Zalazane",         R.RARE,   "Interface\\Icons\\Spell_Shadow_CurseOfSargeras",            "Durotar")
 
 ----------------------------------------------------------------------
 -- Mulgore
@@ -46,7 +46,7 @@ Legend("leg_sharptusk","Palemane's Bane",    "Chief Sharptusk Thornmantle", R.CO
 -- The Barrens
 ----------------------------------------------------------------------
 Legend("leg_kreenig",  "Kreenig Snarlsnout", "Kreenig Snarlsnout", R.COMMON, "Interface\\Icons\\Ability_Hunter_Pet_Boar",   "The Barrens")
-Legend("leg_aean",     "Aean Swiftriver",    "Aean Swiftriver",    R.COMMON, "Interface\\Icons\\Ability_Hunter_Pet_Crocolisk", "The Barrens")
+Legend("leg_aean",     "Aean Swiftriver",    "Aean Swiftriver",    R.COMMON, "Interface\\Icons\\INV_Shield_04", "The Barrens")
 Legend("leg_razorsnout","Elder Razorsnout",  "Elder Mystic Razorsnout", R.RARE, "Interface\\Icons\\Ability_Hunter_Pet_Boar", "The Barrens")  -- VERIFY
 Legend("leg_verog",    "Kolkar Warlord",     "Verog the Dervish",  R.COMMON, "Interface\\Icons\\Ability_Warrior_Cleave",    "The Barrens")   -- VERIFY
 Legend("leg_hezrul",   "Blood of the Kolkar","Hezrul Bloodmark",   R.COMMON, "Interface\\Icons\\INV_Sword_04",              "The Barrens")   -- VERIFY

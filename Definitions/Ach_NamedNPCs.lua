@@ -34,7 +34,7 @@ A{
     description = "Slay Mother Fang in the cellars beneath Elwynn.",
     category = "NAMED", subcategory = "Elwynn & Westfall",
     rarity = R.COMMON, trigger = "KILL",
-    icon = "Interface\\Icons\\Ability_Hunter_Pet_Spider",
+    icon = "Interface\\Icons\\Spell_Nature_Web",
     conditions = { mobNames = { "Mother Fang" } },
 }
 
