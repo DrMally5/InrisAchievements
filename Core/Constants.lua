@@ -100,3 +100,7 @@ ns.BUGREPORT_URL = "https://github.com/DrMally5/InrisAchievements/issues"
 -- djb2 hash of the creator's Battle.net tag (see /ia whoami). Grants the
 -- "Make This Addon" achievement on every character of that account.
 ns.CREATOR_HASH = "af2930b8"
+
+-- The name the Creator achievement's discovery credit always displays,
+-- regardless of which of the author's characters earned it first.
+ns.CREATOR_NAME = "Inrii-Soulseeker"

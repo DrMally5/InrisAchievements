@@ -388,7 +388,13 @@ end
 -- gossip-based, not an authoritative server-first record.
 ----------------------------------------------------------------------
 function DB:GetDiscovery(id)
-    return self.account.discoveries[id]
+    local d = self.account.discoveries[id]
+    -- The Creator's own achievement is always credited to the author's main,
+    -- no matter which of their characters happened to earn it first.
+    if d and id == "hidden_creator" then
+        return { name = ns.CREATOR_NAME, t = d.t }
+    end
+    return d
 end
 
 -- Returns true if this became the new earliest-known discovery.
