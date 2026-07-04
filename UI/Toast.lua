@@ -202,8 +202,10 @@ local function Render(def)
     frame.heading:SetText(def.hidden and L["TOAST_DISCOVERED"] or L["TOAST_EARNED"])
     frame.title:SetText(def.name)
     frame.title:SetTextColor(c[1], c[2], c[3])
-    frame.points:SetText(string.format("|cffffd100+%d %s|r  %s",
-        def.points, L["POINTS_SUFFIX"], Util.Colorize(Util.RarityName(def.rarity), c)))
+    local titleSuffix = (def.title and def.title.text)
+        and ("  |cffffd100\226\152\133 " .. def.title.text .. "|r") or ""
+    frame.points:SetText(string.format("|cffffd100+%d %s|r  %s%s",
+        def.points, L["POINTS_SUFFIX"], Util.Colorize(Util.RarityName(def.rarity), c), titleSuffix))
 
     frame:SetAlpha(0)
     frame:Show()

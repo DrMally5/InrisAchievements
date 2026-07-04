@@ -51,6 +51,7 @@ L["PROGRESS"]             = "Progress"
 L["HIDDEN_NAME"]          = "Hidden Achievement"
 L["HIDDEN_DESC"]          = "The details of this achievement are revealed once someone discovers it."
 L["FIRST_DISCOVERED"]     = "First discovered by %s"
+L["TITLE_REWARD"]         = "Title Reward: %s"
 L["POINTS_SUFFIX"]        = "pts"
 L["REQUIRES"]             = "Requires:"
 

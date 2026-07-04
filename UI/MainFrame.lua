@@ -198,6 +198,11 @@ local function ShowTooltip(row)
             1, 0.82, 0)
         GameTooltip:AddLine(def.description or "", 0.9, 0.9, 0.9, true)
 
+        if def.title and def.title.text then
+            GameTooltip:AddLine("\226\152\133 " .. string.format(L["TITLE_REWARD"], def.title.text),
+                1, 0.82, 0)
+        end
+
         -- Progress
         if def.progressType ~= ns.PROGRESS.BOOLEAN and not completed then
             local cur = (def.progressType == ns.PROGRESS.STAGED)
@@ -385,6 +390,9 @@ local function RenderRow(row, def)
         -- Revealed-but-unearned hidden achievement: credit its finder.
         local disc = ns.DB:GetDiscovery(def.id)
         row.meta:SetText(disc and ("|cffb080ff" .. (disc.name or "") .. "|r") or "")
+    elseif def.title and def.title.text then
+        -- Unearned title-granting achievement: advertise the prize.
+        row.meta:SetText("|cffffd100\226\152\133 " .. def.title.text .. "|r")
     else
         row.meta:SetText("")
     end
