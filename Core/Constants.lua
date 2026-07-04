@@ -94,9 +94,8 @@ ns.DEFAULT_ICON = "Interface\\Icons\\INV_Misc_QuestionMark"
 -- The addon's own logo (custom art shipped in Assets).
 ns.LOGO = "Interface\\AddOns\\InrisAchievements\\Assets\\Logo.tga"
 
--- Where bug reports should be pasted. UPDATE THIS once the public
--- GitHub repo / CurseForge page exists.
-ns.BUGREPORT_URL = "https://github.com/YOUR-ACCOUNT/InrisAchievements/issues"
+-- Where bug reports should be pasted.
+ns.BUGREPORT_URL = "https://github.com/DrMally5/InrisAchievements/issues"
 
 -- djb2 hash of the creator's Battle.net tag (see /ia whoami). Grants the
 -- "Make This Addon" achievement on every character of that account.
