@@ -147,7 +147,7 @@ local function HandleSlash(msg)
             Util.Print("Auto-screenshots: " .. (s.screenshot and "ON" or "OFF"))
         elseif rest == "guildflex" then
             s.guildFlex = not s.guildFlex
-            Util.Print("Guild chat flex (Epic+): " .. (s.guildFlex and "ON" or "OFF"))
+            Util.Print("Guild chat flex (Rare+): " .. (s.guildFlex and "ON" or "OFF"))
         elseif rest == "muteflex" then
             s.muteGuildFlex = not s.muteGuildFlex
             Util.Print("Hide others' flex lines: " .. (s.muteGuildFlex and "ON" or "OFF"))

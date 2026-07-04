@@ -98,7 +98,7 @@ end
 
 ----------------------------------------------------------------------
 -- Guild flex: post big earns to REAL guild chat, visible to every
--- guildmate (addon or not). Epic+/hidden only, and staggered so a meta
+-- guildmate (addon or not). Rare+/hidden only, and staggered so a meta
 -- cascade (one kill completing several achievements) never spams.
 --
 -- Addon users get the prettier clickable announcement through the comm
@@ -129,7 +129,7 @@ end
 ns.Engine:RegisterCallback("COMPLETED", function(id, def)
     if ns._suppressNotify then return end
     if not ns.DB:Settings().guildFlex or not IsInGuild() then return end
-    if def.rarity < ns.RARITY.EPIC and not def.hidden then return end
+    if def.rarity < ns.RARITY.RARE and not def.hidden then return end
 
     local msg
     if def.hidden then

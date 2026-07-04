@@ -49,7 +49,7 @@ local function AccountDefaults()
             toast      = true,
             toastSound = true,
             announce   = true,   -- print a chat line when an achievement is earned
-            guildFlex  = true,   -- post Epic+/hidden earns to real guild chat
+            guildFlex  = true,   -- post Rare+/hidden earns to real guild chat
             muteGuildFlex = true,-- hide OTHERS' flex lines (the addon's own
                                  -- announcement already covers them)
             radar      = true,   -- alert when a needed rare/named mob is nearby
