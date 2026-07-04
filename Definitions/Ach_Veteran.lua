@@ -86,7 +86,7 @@ A{
     description = "Find Newman's Landing, the forgotten dock on the Dun Morogh coast.",
     category = "EXPLORATION", subcategory = "Secrets",
     rarity = R.RARE, trigger = "EXPLORE", hidden = true,
-    icon = "Interface\\Icons\\INV_Misc_Rope_01",
+    icon = "Interface\\Icons\\INV_Crate_01",
     conditions = { zones = { "Newman's Landing" } },   -- VERIFY
 }
 
