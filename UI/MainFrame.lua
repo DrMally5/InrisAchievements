@@ -13,8 +13,8 @@ local Util = ns.Util
 local UI = {}
 ns.UI = UI
 
-local ROW_HEIGHT = 50
-local NUM_ROWS   = 8
+local ROW_HEIGHT = 56
+local NUM_ROWS   = 7
 local CAT_ALL    = "ALL"
 local CAT_RECENT = "RECENT"
 local CAT_GUILD  = "__GUILD"   -- leaderboard (roster + your alts)
@@ -370,7 +370,8 @@ local function RenderRow(row, def)
         .. def.points .. "|r")
 
     -- Progress bar for unfinished counters / staged / progress achievements.
-    if def.progressType ~= ns.PROGRESS.BOOLEAN and not completed then
+    local barShown = def.progressType ~= ns.PROGRESS.BOOLEAN and not completed
+    if barShown then
         local cur = (def.progressType == ns.PROGRESS.STAGED)
             and ns.DB:CountStages(def.id) or ns.DB:GetValue(def.id)
         row.progress:SetMinMaxValues(0, def.target)
@@ -385,13 +386,20 @@ local function RenderRow(row, def)
     end
 
     if completed then
-        row.meta:SetText("|cff40ff40" .. Util.FormatDate(ns.DB:GetCompletedTime(def.id)) .. "|r")
+        -- Earned: show BOTH the title reward and the earn date.
+        local when = "|cff40ff40" .. Util.FormatDate(ns.DB:GetCompletedTime(def.id)) .. "|r"
+        if def.title and def.title.text then
+            row.meta:SetText("|cffffd100" .. ns.STAR_ICON .. def.title.text .. "|r  " .. when)
+        else
+            row.meta:SetText(when)
+        end
     elseif def.hidden then
         -- Revealed-but-unearned hidden achievement: credit its finder.
         local disc = ns.DB:GetDiscovery(def.id)
         row.meta:SetText(disc and ("|cffb080ff" .. (disc.name or "") .. "|r") or "")
-    elseif def.title and def.title.text then
-        -- Unearned title-granting achievement: advertise the prize.
+    elseif def.title and def.title.text and not barShown then
+        -- Unearned title-granting achievement: advertise the prize (skipped
+        -- when the progress bar occupies the line; the tooltip covers it).
         row.meta:SetText("|cffffd100" .. ns.STAR_ICON .. def.title.text .. "|r")
     else
         row.meta:SetText("")
@@ -504,6 +512,21 @@ local function CreateRow(parent, index)
     row.iconGlow:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
     row.iconGlow:SetBlendMode("ADD")
     row.iconGlow:Hide()
+
+    -- Taller row with a dedicated bottom line: description is capped to two
+    -- lines that can never reach the meta text, points sit top-right, and the
+    -- meta line (title reward and/or earn date) owns the full bottom width.
+    row:SetHeight(ROW_HEIGHT)
+    row.points:ClearAllPoints()
+    row.points:SetPoint("TOPRIGHT", -10, -3)
+    row.desc:SetWidth(235)
+    pcall(row.desc.SetMaxLines, row.desc, 2)
+    row.meta:ClearAllPoints()
+    row.meta:SetPoint("BOTTOMRIGHT", -10, 5)
+    row.meta:SetWidth(300)
+    row.meta:SetJustifyH("RIGHT")
+    row.meta:SetWordWrap(false)
+    pcall(row.meta.SetMaxLines, row.meta, 1)
     -- Right-click pins/unpins an incomplete achievement to the on-screen tracker.
     row:RegisterForClicks("LeftButtonUp", "RightButtonUp")
     row:SetScript("OnClick", function(self, btn)
