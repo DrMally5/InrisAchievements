@@ -148,8 +148,11 @@ local function HandleSlash(msg)
         elseif rest == "guildflex" then
             s.guildFlex = not s.guildFlex
             Util.Print("Guild chat flex (Epic+): " .. (s.guildFlex and "ON" or "OFF"))
+        elseif rest == "muteflex" then
+            s.muteGuildFlex = not s.muteGuildFlex
+            Util.Print("Hide others' flex lines: " .. (s.muteGuildFlex and "ON" or "OFF"))
         else
-            Util.Print("Config: /ia config sound | toast | guild | announce | radar | screenshot | guildflex")
+            Util.Print("Config: /ia config sound | toast | guild | announce | radar | screenshot | guildflex | muteflex")
         end
 
     elseif cmd == "reset" then

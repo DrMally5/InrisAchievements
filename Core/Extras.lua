@@ -100,9 +100,22 @@ end
 -- Guild flex: post big earns to REAL guild chat, visible to every
 -- guildmate (addon or not). Epic+/hidden only, and staggered so a meta
 -- cascade (one kill completing several achievements) never spams.
+--
+-- Addon users get the prettier clickable announcement through the comm
+-- layer, so by default a chat filter hides these raw lines for them -
+-- only guildmates WITHOUT the addon see them (which is the point).
 ----------------------------------------------------------------------
+local FLEX_TAG = "[Inri's Achievements]"
 local flexQueue = {}
 local flexBusy = false
+
+ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", function(_, _, msg)
+    if ns.DB and ns.DB.account and ns.DB:Settings().muteGuildFlex
+       and msg and msg:find(FLEX_TAG, 1, true) then
+        return true   -- hide the raw line; the addon announcement covers it
+    end
+    return false
+end)
 
 local function PumpFlex()
     if flexBusy then return end
@@ -120,14 +133,14 @@ ns.Engine:RegisterCallback("COMPLETED", function(id, def)
 
     local msg
     if def.hidden then
-        msg = string.format(
-            "just discovered a hidden achievement: %s! [Inri's Achievements]",
-            def.name)
+        msg = string.format("just discovered a hidden achievement: %s! %s",
+            def.name, FLEX_TAG)
     else
-        msg = string.format("just earned %s (%s, %d pts)%s [Inri's Achievements]",
+        msg = string.format("just earned %s (%s, %d pts)%s %s",
             def.name, Util.RarityName(def.rarity), def.points,
             (def.title and def.title.text)
-                and (" and the title \"" .. def.title.text .. "\"") or "")
+                and (" and the title \"" .. def.title.text .. "\"") or "",
+            FLEX_TAG)
     end
     flexQueue[#flexQueue + 1] = msg
     PumpFlex()
