@@ -142,7 +142,7 @@ A{
     category = "NAMED", subcategory = "Mastery",
     rarity = R.EPIC, trigger = "META",
     icon = "Interface\\Icons\\INV_Misc_Head_Dragon_Black",
-    title = { text = "The Face Collector", rarity = R.EPIC },
+    title = { text = "the Face Collector", rarity = R.EPIC },
     requires = {
         "hogger_early", "hogger_solo_early", "mother_fang", "foe_reaper",
         "morladim", "stitches", "eliza", "the_rake", "lord_cobrahn",

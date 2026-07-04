@@ -103,7 +103,7 @@ A{
     category = "DUNGEONS", subcategory = "Mastery",
     rarity = R.LEGENDARY, trigger = "META",
     icon = "Interface\\Icons\\INV_Misc_Key_11",
-    title = { text = "Dungeon Master", rarity = R.LEGENDARY },
+    title = { text = "the Dungeon Master", rarity = R.LEGENDARY },
     requires = {
         "dn_rfc", "dn_deadmines", "dn_wc", "dn_sfk", "dn_stockade", "dn_bfd",
         "dn_gnomer", "dn_rfk", "dn_rfd", "dn_sm", "dn_uldaman", "dn_zf",

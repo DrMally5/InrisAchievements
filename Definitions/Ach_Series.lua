@@ -42,12 +42,12 @@ Saga("saga_westfall", "Hero of Westfall", "Hero of Westfall", R.RARE,
     "Interface\\Icons\\INV_Misc_Cape_01", "Zone Sagas",
     "Save Westfall: destroy the Foe Reaper, The Collector, Old Murk-Eye, Goldtooth, and clear the Deadmines.")
 
-Saga("saga_duskwood", "The Dusk Stalker", "The Dusk Stalker", R.RARE,
+Saga("saga_duskwood", "The Dusk Stalker", "the Dusk Stalker", R.RARE,
     { "morladim", "stitches", "eliza", "rare_lupos", "rare_krethis" },
     "Interface\\Icons\\Spell_Shadow_Possession", "Zone Sagas",
     "Cleanse Duskwood: lay Mor'Ladim, Stitches, Eliza, Lupos, and Krethis Shadowspinner to rest.")
 
-Saga("saga_stranglethorn", "The Jungle King", "The Jungle King", R.RARE,
+Saga("saga_stranglethorn", "The Jungle King", "the Jungle King", R.RARE,
     { "leg_bangalash", "leg_mukla", "eq_mokk", "eq_ganzulah" },
     "Interface\\Icons\\Ability_Hunter_Pet_Cat", "Zone Sagas",
     "Conquer Stranglethorn: slay King Bangalash, King Mukla, Mokk the Savage, and Gan'zulah.")
@@ -55,22 +55,22 @@ Saga("saga_stranglethorn", "The Jungle King", "The Jungle King", R.RARE,
 ----------------------------------------------------------------------
 -- Named Sagas
 ----------------------------------------------------------------------
-Saga("series_defias", "The Defias Nemesis", "The Defias Nemesis", R.EPIC,
+Saga("series_defias", "The Defias Nemesis", "the Defias Nemesis", R.EPIC,
     { "leg_goldtooth", "leg_garrick", "hogger_early", "leg_collector", "dn_deadmines" },
     "Interface\\Icons\\INV_Misc_Bandana_03", "Named Sagas",
     "Dismantle the Defias Brotherhood from Goldtooth and Garrick Padfoot all the way to Edwin VanCleef.")
 
-Saga("series_scarlet", "The Scarlet Executioner", "The Scarlet Executioner", R.EPIC,
+Saga("series_scarlet", "The Scarlet Executioner", "the Scarlet Executioner", R.EPIC,
     { "leg_loksey", "leg_doan", "leg_herod", "leg_mograine", "dn_sm" },
     "Interface\\Icons\\Spell_Holy_HolySmite", "Named Sagas",
     "Sweep every wing of the Scarlet Monastery: Houndmaster Loksey, Arcanist Doan, Herod, Commander Mograine, and High Inquisitor Whitemane.")
 
-Saga("series_hunter", "Master Hunter", "Master Hunter", R.EPIC,
+Saga("series_hunter", "Master Hunter", "the Master Hunter", R.EPIC,
     { "leg_bangalash", "leg_mukla", "leg_kingmosh", "leg_murkeye", "leg_bellygrub", "leg_arugalson" },
     "Interface\\Icons\\Ability_Hunter_RunningShot", "Named Sagas",
     "Hunt the great beasts of Azeroth: Bangalash, Mukla, King Mosh, Old Murk-Eye, Bellygrub, and the Son of Arugal.")
 
-Saga("series_dragons", "Dragonslayer", "The Dragonslayer", R.LEGENDARY,
+Saga("series_dragons", "Dragonslayer", "the Dragonslayer", R.LEGENDARY,
     { "leg_onyxia", "leg_azuregos", "leg_nefarian", "leg_ysondre", "leg_lethon", "leg_emeriss", "leg_taerar" },
     "Interface\\Icons\\INV_Misc_Head_Dragon_Black", "Named Sagas",
     "Slay every great dragon: Onyxia, Azuregos, Nefarian, and the four Emerald Dreamers.")

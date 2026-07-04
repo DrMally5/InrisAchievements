@@ -102,7 +102,7 @@ local function UpdateCharTitle()
     local active = ns.Titles:GetActive()
     if active then
         local hex = ns.RARITY_INFO[active.rarity].hex
-        nameFS:SetText(base .. "  |cff" .. hex .. active.text .. "|r")
+        nameFS:SetText(base .. "|cff" .. hex .. ns.Titles.SuffixText(active.text) .. "|r")
     else
         nameFS:SetText(base)
     end
@@ -141,8 +141,8 @@ local function ShowPlateTitle(unit)
     -- Append after the nameplate's name if we can find it; else float above.
     local nameFS = plate.UnitFrame and (plate.UnitFrame.name or plate.UnitFrame.Name)
     if nameFS then
-        fs:SetPoint("LEFT", nameFS, "RIGHT", 3, 0)
-        fs:SetText(text)
+        fs:SetPoint("LEFT", nameFS, "RIGHT", 0, 0)
+        fs:SetText(ns.Titles.SuffixText(text))
     else
         fs:SetPoint("BOTTOM", plate, "TOP", 0, 4)
         fs:SetText(STAR .. text)

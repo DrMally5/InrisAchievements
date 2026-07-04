@@ -94,7 +94,7 @@ A{
     category = "ELITE_QUESTS", subcategory = "Mastery",
     rarity = R.EPIC, trigger = "META",
     icon = "Interface\\Icons\\INV_Misc_Note_02",
-    title = { text = "Most Wanted", rarity = R.EPIC },
+    title = { text = "the Most Wanted", rarity = R.EPIC },
     requires = {
         "eq_murkdeep", "eq_stalvan", "eq_maraudos", "eq_mokk",
         "eq_ganzulah", "eq_antusul", "eq_zumrah", "eq_tethis",

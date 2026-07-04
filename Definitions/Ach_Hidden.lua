@@ -42,7 +42,7 @@ A{
     category = "HIDDEN", subcategory = "Secrets",
     rarity = R.EPIC, trigger = "POINTS", hidden = true,
     icon = "Interface\\Icons\\INV_BannerPVP_01",
-    title = { text = "The Dedicated", rarity = R.EPIC },
+    title = { text = "the Dedicated", rarity = R.EPIC },
     conditions = { points = 1000 },
 }
 
@@ -62,5 +62,5 @@ A{
     category = "HIDDEN", subcategory = "Secrets",
     rarity = R.LEGENDARY, trigger = "CREATOR", hidden = true,
     icon = "Interface\\Icons\\INV_Misc_Gear_01",
-    title = { text = "The Creator", rarity = R.LEGENDARY },
+    title = { text = "the Creator", rarity = R.LEGENDARY },
 }

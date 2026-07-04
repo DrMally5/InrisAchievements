@@ -38,6 +38,20 @@ local function TitleRarity(def)
 end
 
 ----------------------------------------------------------------------
+-- How a title attaches after a character's name:
+--   "the ..." and single-word titles join with a space
+--       -> "Inrii the Archmage", "Inrii Leeroy"
+--   formal appellations join with a comma (Blizzard's own convention)
+--       -> "Inrii, Hero of Westfall"
+----------------------------------------------------------------------
+function Titles.SuffixText(text)
+    if text:find("^the ") or not text:find(" ") then
+        return " " .. text
+    end
+    return ", " .. text
+end
+
+----------------------------------------------------------------------
 -- Queries
 ----------------------------------------------------------------------
 function Titles:GetUnlocked()
