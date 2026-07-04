@@ -50,7 +50,7 @@ Clear("dn_lbrs",      "Lower Blackrock Spire", "Overlord Wyrmthalak", 9568, R.EP
 Clear("dn_ubrs",      "Upper Blackrock Spire", "General Drakkisath",  10363, R.EPIC, "Interface\\Icons\\INV_Misc_Head_Dragon_Black", "High Level")
 Clear("dn_dm",        "Dire Maul: West",  "Prince Tortheldrin",     11486, R.EPIC, "Interface\\Icons\\Spell_Shadow_SummonImp", "High Level")
 Clear("dn_dm_east",   "Dire Maul: East",  "Alzzin the Wildshaper",  11492, R.EPIC, "Interface\\Icons\\Spell_Nature_Regenerate", "High Level")
-Clear("dn_dm_north",  "Dire Maul: North", "King Gordok",            11501, R.EPIC, "Interface\\Icons\\INV_Misc_Head_Ogre_01",  "High Level")
+Clear("dn_dm_north",  "Dire Maul: North", "King Gordok",            11501, R.EPIC, "Interface\\Icons\\INV_Misc_Bone_OrcSkull_01",  "High Level")
 Clear("dn_scholo",    "Scholomance",      "Darkmaster Gandling",    1853,  R.EPIC, "Interface\\Icons\\Spell_Shadow_DeathCoil", "High Level")
 Clear("dn_strat",     "Stratholme",       "Baron Rivendare",        10440, R.EPIC, "Interface\\Icons\\Ability_Mount_Dreadsteed", "High Level")
 
@@ -92,7 +92,7 @@ A{
     description = "Clear all three wings of Dire Maul.",
     category = "DUNGEONS", subcategory = "Mastery",
     rarity = R.EPIC, trigger = "META",
-    icon = "Interface\\Icons\\INV_Misc_Head_Ogre_01",
+    icon = "Interface\\Icons\\INV_Misc_Coin_06",
     title = { text = "the Gordok", rarity = R.EPIC },
     requires = { "dn_dm", "dn_dm_east", "dn_dm_north" },
 }
