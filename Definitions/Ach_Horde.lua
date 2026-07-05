@@ -35,6 +35,17 @@ Legend("leg_sarkoth",  "Sarkoth",            "Sarkoth",          R.COMMON, "Inte
 Legend("leg_gazzuz",   "Burning Blade",      "Gazz'uz",          R.COMMON, "Interface\\Icons\\Spell_Fire_Fireball",         "Durotar")   -- VERIFY
 Legend("leg_zalazane", "Free the Isles!",    "Zalazane",         R.RARE,   "Interface\\Icons\\Spell_Shadow_CurseOfSargeras",            "Durotar")
 
+-- The Horde's own "Hogger before 11" rite of passage: the Dark Storms quest
+-- target, tuned well above the level you meet him at.
+A{
+    id = "fizzle_early", name = "Fizzled Out",
+    description = "Defeat Fizzle Darkstorm before reaching level 11.",
+    category = "LEGENDS", subcategory = "Durotar",
+    rarity = R.RARE, trigger = "KILL",
+    icon = "Interface\\Icons\\Spell_Shadow_ShadowBolt",
+    conditions = { npcIDs = { 3203 }, mobNames = { "Fizzle Darkstorm" }, maxPlayerLevel = 10 },   -- VERIFY npcID
+}
+
 ----------------------------------------------------------------------
 -- Mulgore
 ----------------------------------------------------------------------
