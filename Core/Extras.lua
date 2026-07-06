@@ -109,10 +109,16 @@ local FLEX_TAG = "[Inri's Achievements]"
 local flexQueue = {}
 local flexBusy = false
 
-ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", function(_, _, msg)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", function(_, _, msg, sender)
     if ns.DB and ns.DB.account and ns.DB:Settings().muteGuildFlex
        and msg and msg:find(FLEX_TAG, 1, true) then
-        return true   -- hide the raw line; the addon announcement covers it
+        -- Never hide your OWN flex: it's your confirmation the broadcast went
+        -- out. The mute only silences OTHER guildmates' raw lines (you get
+        -- the prettier addon announcement for those instead).
+        local short = sender and Ambiguate(sender, "short") or sender
+        if short ~= UnitName("player") then
+            return true
+        end
     end
     return false
 end)
