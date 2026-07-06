@@ -16,6 +16,8 @@ local A, R = ns.RegisterAchievement, ns.RARITY
 
 A{
     id = "hidden_leeroy", name = "Hidden Achievement", description = "",
+    teaser = "Ten Seconds of Glory",
+    teaserDesc = "The plan was bad. The execution was worse. The legend was eternal.",
     category = "HIDDEN", subcategory = "Secrets",
     rarity = R.EPIC, trigger = "KILLSTREAK", hidden = true,
     title = { rarity = R.EPIC },
@@ -25,6 +27,8 @@ A{
 
 A{
     id = "hidden_lowbie_hero", name = "Hidden Achievement", description = "",
+    teaser = "Out of Your League",
+    teaserDesc = "Some fights you were never meant to win. Win one anyway - while you're still small.",
     category = "HIDDEN", subcategory = "Secrets",
     rarity = R.EPIC, trigger = "KILL", hidden = true,
     sealed = "42b427e9388298cc2993265f9b310e0789fe41841c3797377df325f1b9b6864e40e59778d8533add915dc8d563472d330c340cfd52a1c544cbc5bbc6d1015f7fbce4f1bb042833f0fd23be1d921ae75fc2dc3f2811108dbe6bc5861838fd8b3d5cee438365d3753b591d938e13a32018267d7d9d790d2706",
@@ -33,6 +37,8 @@ A{
 
 A{
     id = "hidden_points_500", name = "Hidden Achievement", description = "",
+    teaser = "The Collection Grows",
+    teaserDesc = "Keep earning. Something waits at a round number.",
     category = "HIDDEN", subcategory = "Secrets",
     rarity = R.RARE, trigger = "POINTS", hidden = true,
     sealed = "113a4a3169595be26588d0b2091d6394c7036485b61c88d29777579b07dbd1b3b6493745720c83b5d0ae54a9cea335ada247f9c6fea7d968a907a991980ec59070e47122be77a82e56d51e40cf9bf529b28a",
@@ -41,6 +47,8 @@ A{
 
 A{
     id = "hidden_points_1000", name = "Hidden Achievement", description = "",
+    teaser = "Devotion Has a Number",
+    teaserDesc = "Those who never stop earning are remembered for it.",
     category = "HIDDEN", subcategory = "Secrets",
     rarity = R.EPIC, trigger = "POINTS", hidden = true,
     title = { rarity = R.EPIC },
@@ -50,6 +58,8 @@ A{
 
 A{
     id = "hidden_time_sand", name = "Hidden Achievement", description = "",
+    teaser = "Whispers in the Sand",
+    teaserDesc = "The desert keeps two lonely secrets. Find them both.",
     category = "HIDDEN", subcategory = "Secrets",
     rarity = R.RARE, trigger = "META", hidden = true,
     sealed = "f8cce87b7bd16a1fccb97e85d5978964f4731a4ddb30e8728832f199caea63dc71c8fcdf86950d0eaf3fdba977fcd03ea72fd79c9021a41acd71139aa9171063e69300caea86a3cb995358ddc8376d7da925ba8550cf3341f5bdf3ae3e4ce4f289b476c036",

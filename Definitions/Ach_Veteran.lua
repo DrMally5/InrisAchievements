@@ -77,6 +77,8 @@ A{
 ----------------------------------------------------------------------
 A{
     id = "hidden_princess_pig", name = "Hidden Achievement", description = "",
+    teaser = "Not That Princess",
+    teaserDesc = "Not every princess lives in a dungeon.",
     category = "LEGENDS", subcategory = "Secrets",
     rarity = R.RARE, trigger = "KILL", hidden = true,
     sealed = "9db22590307520718aa6d234c4c6680db2823f097500723e50d34ed3a08030c445e4438f10a11c7bb920ae1f7df115f4623f751dfce1610930d2653be7359d38ed09e17a6795860f4468674e37bc06f990bc1b7d60c15c304a4d47afcc0d967d58ba3512f79037c199d76995293976f1011cd44df36d7ee7d1839ff0d409841a18ca8791364e",
@@ -88,6 +90,8 @@ A{
 
 A{
     id = "hidden_newmans", name = "Hidden Achievement", description = "",
+    teaser = "The Forgotten Dock",
+    teaserDesc = "Some docks never saw a ship arrive.",
     category = "EXPLORATION", subcategory = "Secrets",
     rarity = R.RARE, trigger = "EXPLORE", hidden = true,
     sealed = "d0a9bdc02953765d7d663ed71b879a56d1ad3c8bd58e1d5e83fdadedb3de1eac38da971dd7261cdc45cc5db7926a340f2092090e0224191005877ca938b48c436b2bef0f1e788e4ae0a7e016de166a9b20657a46ffa766ff39a0d4ad8a79182327f1d8863feb31accd0feb90e1ed22cd49c65bc6",
@@ -98,6 +102,8 @@ A{
 
 A{
     id = "hidden_airfield", name = "Hidden Achievement", description = "",
+    teaser = "Head in the Clouds",
+    teaserDesc = "There is a place they say you cannot reach. They are almost right.",
     category = "EXPLORATION", subcategory = "Secrets",
     rarity = R.EPIC, trigger = "EXPLORE", hidden = true,
     sealed = "ea8743b710680b8dff896c91927f1f2baf49cc11664db4b3de9ffdbe4d5d164ab5fda593e56fd51f8f789f802d4376ae0af8a1c1a2a4fe30fe1ddd834820fb0fbdf1764681126e020fc2338805db25a461160c609dbd4bd09c256760e7b5e5e22509a84f48f284b093a7f470c2d3631549",

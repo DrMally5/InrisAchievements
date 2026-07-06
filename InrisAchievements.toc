@@ -2,7 +2,7 @@
 ## Title: Inri's Achievements!
 ## Notes: A handcrafted achievement system for WoW Classic. Earn it, don't get it.
 ## Author: Inri
-## Version: 1.0.0
+## Version: 1.0.1
 ## SavedVariables: InrisAchievementsDB
 ## SavedVariablesPerCharacter: InrisAchievementsCharDB
 ## IconTexture: Interface\AddOns\InrisAchievements\Assets\Logo.tga

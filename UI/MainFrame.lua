@@ -190,8 +190,8 @@ local function ShowTooltip(row)
     GameTooltip:SetOwner(row, "ANCHOR_RIGHT")
     local color = Util.RarityColor(def.rarity)
     if masked then
-        GameTooltip:AddLine(L["HIDDEN_NAME"], 0.6, 0.6, 0.6)
-        GameTooltip:AddLine(L["HIDDEN_DESC"], 0.8, 0.8, 0.8, true)
+        GameTooltip:AddLine(def.teaser or L["HIDDEN_NAME"], 0.6, 0.6, 0.6)
+        GameTooltip:AddLine(def.teaserDesc or L["HIDDEN_DESC"], 0.8, 0.8, 0.8, true)
     else
         GameTooltip:AddLine(def.name, color[1], color[2], color[3])
         GameTooltip:AddLine(Util.RarityName(def.rarity) .. " - " .. def.points .. " " .. L["POINTS_SUFFIX"],
@@ -330,9 +330,9 @@ local function RenderRow(row, def)
 
     if masked then
         row.icon:SetTexture(ns.DEFAULT_ICON)
-        row.name:SetText(L["HIDDEN_NAME"])
+        row.name:SetText(def.teaser or L["HIDDEN_NAME"])
         row.name:SetTextColor(0.6, 0.6, 0.6)
-        row.desc:SetText(L["HIDDEN_DESC"])
+        row.desc:SetText(def.teaserDesc or L["HIDDEN_DESC"])
         row.points:SetText("|cff808080?|r")
         row.meta:SetText("")
         row.progress:Hide()

@@ -79,7 +79,39 @@ end
 
 function Comm:Hello()
     local channel = BroadcastChannel()
-    if channel then self:Send(OP.HELLO, self:SummaryPayload(), channel) end
+    if channel then
+        self:Send(OP.HELLO, self:SummaryPayload(), channel)
+        self:SendDiscoveries(channel)
+    end
+end
+
+----------------------------------------------------------------------
+-- Discovery sync: hidden-achievement discoveries only spread through live
+-- EARNED broadcasts, so anyone offline at the moment of discovery would stay
+-- masked forever. Each HELLO exchange therefore also carries the known
+-- discovery records (one message each; there are at most a handful). The
+-- earliest timestamp wins, same trust model as EARNED gossip.
+----------------------------------------------------------------------
+function Comm:SendDiscoveries(channel, target)
+    local discoveries = ns.DB.account and ns.DB.account.discoveries
+    if not discoveries then return end
+    for id, d in pairs(discoveries) do
+        if d.name then
+            self:Send(OP.DISCO, Util.PackFields(id, d.name, d.t or 0, d.k or ""),
+                      channel, target)
+        end
+    end
+end
+
+local function HandleDisco(sender, rest)
+    local id, name, t, k = Util.UnpackFields(rest)
+    local def = id and ns.GetAchievement(id)
+    if not def or not def.hidden or not name or name == "" then return end
+    t = tonumber(t) or time()
+    if t > time() then t = time() end   -- no claiming the future
+    if k == "" then k = nil end
+    if def.sealed then ns.TryRevealHidden(def, k) end
+    ns.DB:RecordDiscovery(id, name, t, k)
 end
 
 ----------------------------------------------------------------------
@@ -159,8 +191,10 @@ local function HandleHello(sender, rest)
     local p, c, v, cls, fac, hi, tt, tr = Util.UnpackFields(rest)
     local entry = StoreSummary(sender, p, c, v, cls, fac, hi, tt, tr)
     if ns.Inspect then ns.Inspect:OnSummary(Util.NormalizeName(sender), entry) end
-    -- Reply privately with our summary so their roster learns about us too.
+    -- Reply privately with our summary so their roster learns about us too,
+    -- plus any hidden discoveries we know of (they may have missed the news).
     Comm:Send(OP.SUMMARY, Comm:SummaryPayload(), "WHISPER", sender)
+    Comm:SendDiscoveries("WHISPER", sender)
 end
 
 local function HandleSummary(sender, rest)
@@ -259,6 +293,7 @@ local dispatch = {
     [OP.PROFILE] = HandleProfile,
     [OP.FULL]    = HandleFull,
     [OP.EARNED]  = HandleEarned,
+    [OP.DISCO]   = HandleDisco,
 }
 
 local function OnAddonMessage(prefix, message, channel, sender)

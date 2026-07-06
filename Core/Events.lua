@@ -76,6 +76,37 @@ local DAMAGE_SUB = {
     DAMAGE_SHIELD = true, DAMAGE_SPLIT = true,
 }
 
+local HEAL_SUB = { SPELL_HEAL = true, SPELL_PERIODIC_HEAL = true }
+
+----------------------------------------------------------------------
+-- Outside-help ledger: "solo" and David-and-Goliath feats are only honest if
+-- no OTHER player helped - including ungrouped ones (an out-of-group friend
+-- healing you through "solo Hogger" is not solo). The combat log flags every
+-- source, so we notice when an outside player (or their pet) damages our
+-- target or heals us mid-fight.
+----------------------------------------------------------------------
+local outsideDamaged = {}    -- [mobGUID] = GetTime() of last outsider damage
+local outsideHealT   = 0     -- last time an outsider healed us in combat
+local OUTSIDE_TTL    = 60    -- how long outsider damage taints a mob
+local HEAL_TAINT     = 20    -- how long an outside heal taints our kills
+
+local AFFIL_OUTSIDER = COMBATLOG_OBJECT_AFFILIATION_OUTSIDER or 0x00000008
+local CONTROL_PLAYER = COMBATLOG_OBJECT_CONTROL_PLAYER or 0x00000100
+
+local function OutsiderControlled(flags)
+    return flags
+        and bit.band(flags, AFFIL_OUTSIDER) ~= 0
+        and bit.band(flags, CONTROL_PLAYER) ~= 0
+end
+
+local function OutsideHelp(mobGUID)
+    local now = GetTime()
+    if mobGUID and outsideDamaged[mobGUID] and (now - outsideDamaged[mobGUID]) <= OUTSIDE_TTL then
+        return true
+    end
+    return (now - outsideHealT) <= HEAL_TAINT
+end
+
 -- Occasional prune so the caches can't grow without bound.
 local function PruneCache()
     local now = GetTime()
@@ -84,6 +115,9 @@ local function PruneCache()
     end
     for guid, t in pairs(damagedByUs) do
         if now - t > DAMAGE_TTL then damagedByUs[guid] = nil end
+    end
+    for guid, t in pairs(outsideDamaged) do
+        if now - t > OUTSIDE_TTL then outsideDamaged[guid] = nil end
     end
 end
 
@@ -186,6 +220,7 @@ local function BuildKillPayload(destGUID, destName, source)
         zone          = zone,
         subZone       = GetSubZoneText(),
         runTime       = InstanceRunTime(),
+        outsideHelp   = OutsideHelp(destGUID),
     }
 end
 
@@ -217,12 +252,28 @@ local function OnUnitDied(destGUID, destName)
 end
 
 local function OnCombatLog()
-    local _, sub, _, srcGUID, _, _, _, destGUID, destName = CombatLogGetCurrentEventInfo()
+    local _, sub, _, srcGUID, _, srcFlags, _, destGUID, destName = CombatLogGetCurrentEventInfo()
 
     -- Record our own damage so UNIT_DIED can tell a real kill from a witnessed
-    -- one. (Damage events far outnumber deaths, so this returns early.)
+    -- one, and outsider damage so solo feats stay honest. (Damage events far
+    -- outnumber deaths, so this returns early.)
     if DAMAGE_SUB[sub] then
-        if destGUID and WeDamaged(srcGUID) then damagedByUs[destGUID] = GetTime() end
+        if destGUID then
+            if WeDamaged(srcGUID) then
+                damagedByUs[destGUID] = GetTime()
+            elseif OutsiderControlled(srcFlags) then
+                outsideDamaged[destGUID] = GetTime()
+            end
+        end
+        return
+    end
+
+    -- An outside player healing us (or our pet) mid-combat taints solo feats.
+    if HEAL_SUB[sub] then
+        if OutsiderControlled(srcFlags) and UnitAffectingCombat("player")
+           and (destGUID == UnitGUID("player") or destGUID == UnitGUID("pet")) then
+            outsideHealT = GetTime()
+        end
         return
     end
 

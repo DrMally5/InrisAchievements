@@ -68,6 +68,7 @@ ns.OP = {
     FULL     = "F",   -- full dump of completed achievement IDs (chunked)
     PROFILE  = "P",   -- profile header (guild, recent, notable)
     EARNED   = "E",   -- "I just earned achievement <id>" (chat announce)
+    DISCO    = "D",   -- known hidden-achievement discoveries (id, name, t, key)
 }
 
 ----------------------------------------------------------------------

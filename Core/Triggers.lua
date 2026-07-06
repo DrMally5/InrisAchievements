@@ -101,6 +101,13 @@ local function KillQualifies(def, p)
         return false
     end
 
+    -- Fairness: "solo" and beat-something-above-you feats are void if an
+    -- OUTSIDE (ungrouped) player damaged the target or healed us mid-fight.
+    -- Grouped help is already covered by solo/maxGroupLevel themselves.
+    if (c.solo or c.minLevelAbove) and p.outsideHelp then
+        return false
+    end
+
     -- Mob must out-level the player by at least N. A "??" (skull) mob reports
     -- level -1, which by definition is far above us, so it qualifies.
     if c.minLevelAbove then
