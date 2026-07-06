@@ -109,16 +109,23 @@ local FLEX_TAG = "[Inri's Achievements]"
 local flexQueue = {}
 local flexBusy = false
 
-ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", function(_, _, msg, sender)
-    if ns.DB and ns.DB.account and ns.DB:Settings().muteGuildFlex
-       and msg and msg:find(FLEX_TAG, 1, true) then
-        -- Never hide your OWN flex: it's your confirmation the broadcast went
-        -- out. The mute only silences OTHER guildmates' raw lines (you get
-        -- the prettier addon announcement for those instead).
+ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", function(_, _, msg, sender, ...)
+    if not (msg and msg:find(FLEX_TAG, 1, true)) then return false end
+
+    -- Hide OTHER guildmates' raw flex lines when muted (you get the prettier
+    -- clickable addon announcement for those instead). Your OWN line always
+    -- shows - it's your confirmation the broadcast went out.
+    if ns.DB and ns.DB.account and ns.DB:Settings().muteGuildFlex then
         local short = sender and Ambiguate(sender, "short") or sender
         if short ~= UnitName("player") then
             return true
         end
+    end
+
+    -- Line is shown: make the achievement name clickable for us (addon users).
+    local linked = ns.LinkifyFlex and ns.LinkifyFlex(msg)
+    if linked and linked ~= msg then
+        return false, linked, sender, ...
     end
     return false
 end)

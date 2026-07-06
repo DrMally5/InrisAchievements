@@ -849,6 +849,27 @@ hooksecurefunc("SetItemRef", function(link)
     end
 end)
 
+-- Turn the achievement NAME inside a received guild-flex line into a clickable
+-- link, for addon users only. The plain text is what travels the wire; each
+-- client rebuilds the link locally by matching our message wording and looking
+-- the name up. Non-addon users never run this and see unchanged plain text.
+local flexNameIndex
+function ns.LinkifyFlex(msg)
+    if not msg then return msg end
+    local name = msg:match("just earned (.-) %(")
+              or msg:match("just discovered a hidden achievement: (.+)!")
+    if not name or name == "" then return msg end
+    if not flexNameIndex then
+        flexNameIndex = {}
+        for _, d in ipairs(ns.Achievements) do flexNameIndex[d.name] = d end
+    end
+    local def = flexNameIndex[name]
+    if not def then return msg end
+    local s, e = msg:find(name, 1, true)   -- plain (non-pattern) find
+    if not s then return msg end
+    return msg:sub(1, s - 1) .. ns.AchievementLink(def) .. msg:sub(e + 1)
+end
+
 -- charName/classColor are nil for the local player (we fill them in).
 function ns.AnnounceEarned(charName, def, classColor)
     local who = charName or UnitName("player")

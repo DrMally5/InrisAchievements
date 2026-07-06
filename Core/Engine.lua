@@ -92,9 +92,10 @@ function ns.RegisterAchievement(def)
 
     -- Guard against icon paths that don't exist in this client (they would
     -- render as blank squares): fall back to the question mark and remember
-    -- the bad path so /ia icons can report it.
-    if GetFileIDFromPath and def.icon ~= ns.DEFAULT_ICON
-       and not GetFileIDFromPath(def.icon) then
+    -- the bad path so /ia icons can report it. Numeric icons are FileDataIDs
+    -- (e.g. pulled from an item) and are inherently valid - skip them.
+    if type(def.icon) == "string" and def.icon ~= ns.DEFAULT_ICON
+       and GetFileIDFromPath and not GetFileIDFromPath(def.icon) then
         def.iconMissing = def.icon
         def.icon = ns.DEFAULT_ICON
     end
