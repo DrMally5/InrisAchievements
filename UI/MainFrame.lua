@@ -829,28 +829,25 @@ ns.Engine:RegisterCallback("COMPLETED", function() UI:Refresh() end)
 
 ----------------------------------------------------------------------
 -- Chat announcements with a clickable link that opens the achievement.
--- The link uses a custom "inriach:" hyperlink type. Clicking routes through
--- Blizzard's SetItemRef, which forwards unknown link types to
--- ItemRefTooltip:SetHyperlink() - and the client ERRORS on types it does not
--- recognize. So we intercept our links in a SetHyperlink wrapper before they
--- reach the client (the same pattern Questie uses for its quest links).
+--
+-- A fully custom link type ("inriach:") is NOT treated as interactive by the
+-- Classic client - it renders as coloured text but never fires a click. So we
+-- piggyback on "garrmission:", a real (WoD garrison) link type the client DOES
+-- make clickable and which no-ops harmlessly in Classic, tagged with our own
+-- "inriach" sub-id. This is the proven pattern used by other Classic
+-- achievement addons. Clicks are caught with a post-hook on SetItemRef.
 ----------------------------------------------------------------------
 function ns.AchievementLink(def)
     local hex = Util.RarityInfo(def.rarity).hex
-    return string.format("|cff%s|Hinriach:%s|h[%s]|h|r", hex, def.id, def.name)
+    return string.format("|cff%s|Hgarrmission:inriach:%s|h[%s]|h|r", hex, def.id, def.name)
 end
 
-do
-    local origSetHyperlink = ItemRefTooltip.SetHyperlink
-    function ItemRefTooltip:SetHyperlink(link, ...)
-        local id = link and link:match("^inriach:(.+)$")
-        if id then
-            if ns.UI then ns.UI:OpenToAchievement(id) end
-            return
-        end
-        return origSetHyperlink(self, link, ...)
+hooksecurefunc("SetItemRef", function(link)
+    local kind, tag, id = strsplit(":", link or "")
+    if kind == "garrmission" and tag == "inriach" and id and id ~= "" then
+        if ns.UI then ns.UI:OpenToAchievement(id) end
     end
-end
+end)
 
 -- charName/classColor are nil for the local player (we fill them in).
 function ns.AnnounceEarned(charName, def, classColor)
