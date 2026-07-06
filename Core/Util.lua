@@ -220,8 +220,8 @@ function Util.UnpackFields(str)
     return strsplit(Util.FIELD_SEP, str)
 end
 
--- Encode a sorted list of integer IDs as a comma string. Sorted so diffs and
--- chunk boundaries are stable across clients.
+-- Encode a sorted list of achievement IDs as a comma string. Achievement IDs
+-- are STRINGS (e.g. "fizzle_early"); sorted so chunk boundaries are stable.
 function Util.PackIDList(ids)
     table.sort(ids)
     return table.concat(ids, Util.LIST_SEP)
@@ -231,8 +231,7 @@ function Util.UnpackIDList(str)
     local out = {}
     if not str or str == "" then return out end
     for part in str:gmatch("[^,]+") do
-        local n = tonumber(part)
-        if n then out[#out + 1] = n end
+        out[#out + 1] = part   -- ids are strings; do NOT tonumber them
     end
     return out
 end

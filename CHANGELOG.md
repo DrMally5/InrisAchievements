@@ -11,6 +11,8 @@ The fairness & secrets update.
   helps** - an ungrouped friend healing you or hitting your target now
   disqualifies the attempt, exactly as it should.
 - Clicking an achievement link in chat no longer causes a Lua error.
+- Viewing another player's profile now shows their rarity breakdown,
+  notable achievements, and recent earns (the shared list came back empty)
 - Your own guild broadcast line is no longer hidden from you.
 - Replaced ~20 icon textures that do not exist in the Classic client (blank
   squares); bad icon paths now fall back to a question mark, and `/ia icons`
