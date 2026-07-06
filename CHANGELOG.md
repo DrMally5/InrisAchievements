@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1] - 2026-07-06
+### Changed
+- Achievement earns are now announced in **guild chat only** - the separate
+  local "you earned X" chat line has been removed (it duplicated the guild
+  announcement). Rare and above post to guild chat, with a clickable name for
+  fellow addon users. Hidden-achievement discovery still syncs silently in the
+  background.
+
+
 ## [1.1.0] - 2026-07-06
 Legendary weapons, boss feats, and networked profiles.
 
