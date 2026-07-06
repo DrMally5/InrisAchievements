@@ -28,6 +28,15 @@ The fairness & secrets update.
   clickable version instead (`/ia config muteflex`).
 - New achievement: **Fizzled Out** - defeat Fizzle Darkstorm before level 11
   (the Horde's own Hogger rite). 247 total.
+- **`/ia here`** - lists everything still earnable around your current location,
+  rarest first, as clickable links.
+- **`/ia config`** now shows every toggle with its live ON/OFF state and a
+  plain-English description.
+- Joining a group now automatically exchanges summaries and discoveries with
+  it (throttled) - discoveries hop between guilds through pugs.
+
+### Removed
+- `/ia title <name>` - the `/ia titles` dropdown covers it without typos.
 
 
 ## [1.0.0] - 2026-06-30
