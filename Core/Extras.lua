@@ -111,18 +111,9 @@ local flexBusy = false
 
 ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", function(_, _, msg, sender, ...)
     if not (msg and msg:find(FLEX_TAG, 1, true)) then return false end
-
-    -- Hide OTHER guildmates' raw flex lines when muted (you get the prettier
-    -- clickable addon announcement for those instead). Your OWN line always
-    -- shows - it's your confirmation the broadcast went out.
-    if ns.DB and ns.DB.account and ns.DB:Settings().muteGuildFlex then
-        local short = sender and Ambiguate(sender, "short") or sender
-        if short ~= UnitName("player") then
-            return true
-        end
-    end
-
-    -- Line is shown: make the achievement name clickable for us (addon users).
+    -- Make the achievement name clickable for addon users. The plain text is
+    -- what travels the wire; non-addon guildmates never run this and see it
+    -- unchanged.
     local linked = ns.LinkifyFlex and ns.LinkifyFlex(msg)
     if linked and linked ~= msg then
         return false, linked, sender, ...

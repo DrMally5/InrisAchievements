@@ -253,14 +253,13 @@ local function HandleFull(sender, rest)
 end
 
 ----------------------------------------------------------------------
--- Earned announcements ("X has earned [Achievement]!")
+-- Earn broadcast: drives realtime hidden-achievement discovery sync (the seal
+-- key rides along). There is no chat line - guild chat is the only visible
+-- announcement - so this fires regardless of any per-player setting.
 ----------------------------------------------------------------------
 function Comm:AnnounceEarned(id)
-    if not ns.DB:Settings().announce then return end
     local channel = BroadcastChannel()
     if not channel then return end
-    -- Sealed hidden achievements carry their seal key, so hearing about a
-    -- discovery is what unmasks the achievement for everyone in earshot.
     local def = ns.GetAchievement(id)
     local k = (def and def.hidden and def._sealK) or ""
     self:Send(OP.EARNED, Util.PackFields(tostring(id), k), channel)
@@ -273,17 +272,11 @@ local function HandleEarned(sender, rest)
     if k == "" then k = nil end
 
     -- Hidden achievements: whoever we hear earned it first becomes its known
-    -- discoverer (recorded even if the local player has announcements off),
-    -- and the carried key unmasks a sealed def on the spot.
+    -- discoverer, and the carried key unmasks a sealed def on the spot.
     if def.hidden then
         if def.sealed then ns.TryRevealHidden(def, k) end
         ns.DB:RecordDiscovery(def.id, Util.NormalizeName(sender), time(), k)
     end
-
-    if not ns.DB:Settings().announce or not ns.AnnounceEarned then return end
-    local entry = ns.DB:GetRosterEntry(Util.NormalizeName(sender))
-    local cc = entry and Util.ClassColor(entry.classToken) or nil
-    ns.AnnounceEarned(sender, def, cc)
 end
 
 local dispatch = {

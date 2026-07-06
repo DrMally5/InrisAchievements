@@ -163,9 +163,6 @@ local function HandleSlash(msg)
         elseif rest == "guild" then
             s.shareGuild = not s.shareGuild
             Util.Print("Guild sharing: " .. (s.shareGuild and "ON" or "OFF"))
-        elseif rest == "announce" then
-            s.announce = not s.announce
-            Util.Print("Earned announcements: " .. (s.announce and "ON" or "OFF"))
         elseif rest == "radar" then
             s.radar = not s.radar
             Util.Print("Rare Radar: " .. (s.radar and "ON" or "OFF"))
@@ -174,10 +171,7 @@ local function HandleSlash(msg)
             Util.Print("Auto-screenshots: " .. (s.screenshot and "ON" or "OFF"))
         elseif rest == "guildflex" then
             s.guildFlex = not s.guildFlex
-            Util.Print("Guild chat flex (Rare+): " .. (s.guildFlex and "ON" or "OFF"))
-        elseif rest == "muteflex" then
-            s.muteGuildFlex = not s.muteGuildFlex
-            Util.Print("Hide others' flex lines: " .. (s.muteGuildFlex and "ON" or "OFF"))
+            Util.Print("Guild chat announcements (Rare+): " .. (s.guildFlex and "ON" or "OFF"))
         else
             -- No (or unknown) option: show every toggle with its current
             -- state and what it does.
@@ -188,10 +182,8 @@ local function HandleSlash(msg)
             Util.Print("Toggle with |cffffd100/ia config <option>|r:")
             line("toast",      s.toast,         "achievement popup banners")
             line("sound",      s.toastSound,    "toast sound effects")
-            line("announce",   s.announce,      "chat lines when achievements are earned")
             line("guild",      s.shareGuild,    "share your progress with guildmates")
-            line("guildflex",  s.guildFlex,     "post Rare+ earns to real guild chat (everyone sees)")
-            line("muteflex",   s.muteGuildFlex, "hide other addon users' flex lines (you get the clickable version)")
+            line("guildflex",  s.guildFlex,     "announce Rare+ earns in guild chat (everyone sees)")
             line("radar",      s.radar,         "ping when a named mob you still need is nearby")
             line("screenshot", s.screenshot,    "auto-screenshot on Epic+ earns")
             Util.Print("|cff808080Also in Interface Options > AddOns > Inri's Achievements.|r")

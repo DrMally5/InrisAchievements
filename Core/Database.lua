@@ -48,11 +48,8 @@ local function AccountDefaults()
         settings = {
             toast      = true,
             toastSound = true,
-            announce   = true,   -- print a chat line when an achievement is earned
-            guildFlex  = true,   -- post Rare+/hidden earns to real guild chat
-            muteGuildFlex = false,-- hide OTHERS' raw flex lines? off by default,
-                                  -- so addon users also see the guild-chat line
-                                  -- (with a clickable name)
+            guildFlex  = true,   -- announce Rare+/hidden earns in guild chat
+                                 -- (the only chat notification; no local line)
             radar      = true,   -- alert when a needed rare/named mob is nearby
             screenshot = true,   -- auto-screenshot on Epic+ earns
             shareGuild = true,

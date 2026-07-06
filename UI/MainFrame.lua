@@ -879,16 +879,10 @@ function ns.LinkifyFlex(msg)
     return msg:sub(1, s - 1) .. ns.AchievementLink(def) .. msg:sub(e + 1)
 end
 
--- charName/classColor are nil for the local player (we fill them in).
-function ns.AnnounceEarned(charName, def, classColor)
-    local who = charName or UnitName("player")
-    local nameStr = classColor and Util.Colorize(who, classColor) or Util.Colorize(who, { 0, 1, 0.59 })
-    DEFAULT_CHAT_FRAME:AddMessage(string.format("%s has earned the achievement %s!",
-        nameStr, ns.AchievementLink(def)))
-end
-
+-- Achievement earns are announced in GUILD CHAT only (see the guild flex in
+-- Extras) - there is no separate local "you earned X" chat line. We still
+-- broadcast the earn to peers so hidden-achievement discoveries sync live.
 ns.Engine:RegisterCallback("COMPLETED", function(id, def)
-    if not ns.DB:Settings().announce or ns._suppressNotify then return end
-    ns.AnnounceEarned(nil, def, Util.ClassColor(ns.DB:GetMeta().classToken))
+    if ns._suppressNotify then return end
     if ns.Comm then ns.Comm:AnnounceEarned(id) end
 end)
