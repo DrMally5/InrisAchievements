@@ -85,8 +85,11 @@ function Util.NormalizeName(name, realm)
         local n, r = strsplit("-", name)
         return n .. "-" .. (r:gsub("%s+", ""))
     end
-    realm = (realm or GetRealmName() or ""):gsub("%s+", "")
-    return name .. "-" .. realm
+    -- UnitName() returns an EMPTY string (not nil) for same-realm units, and
+    -- "" is truthy in Lua - so fall back to the player's realm explicitly,
+    -- otherwise the key becomes "Name-" and never matches the stored "Name-Realm".
+    if not realm or realm == "" then realm = GetRealmName() or "" end
+    return name .. "-" .. (realm:gsub("%s+", ""))
 end
 
 ----------------------------------------------------------------------
