@@ -38,13 +38,31 @@ end
 ----------------------------------------------------------------------
 local function KillQualifies(def, p)
     local c = def.conditions
+    local sealKey   -- unwrapped seal key for a sealed secret; the reveal is
+                    -- deferred until the WHOLE kill qualifies, so the wrong
+                    -- same-named mob (e.g. the RFK Princess) never spoils it.
 
     -- UNIT_DIED is a noisy source (every nearby death). Only let it credit
     -- achievements that name a specific target; broad/counter achievements
     -- require a confirmed PARTY_KILL.
-    local specific = c.npcIDs or c.mobNames
+    local specific = c.npcIDs or c.mobNames or c.matchers
     if p.source == "UNIT_DIED" and not specific then
         return false
+    end
+
+    -- Sealed name matching (hidden secrets): the target ships only as a hash;
+    -- a real match unwraps the def's master key and reveals its true text.
+    if c.matchers then
+        if not p.mobName then return false end
+        local hash, ok = ns.Util.HashString(p.mobName), false
+        for _, m in ipairs(c.matchers) do
+            if m.h == hash then
+                sealKey = ns.Util.SealXor(m.w, p.mobName)  -- defer the reveal
+                ok = true
+                break
+            end
+        end
+        if not ok then return false end
     end
 
     -- Specific creatures, matched by NPC ID and/or name. Name matching makes
@@ -103,6 +121,16 @@ local function KillQualifies(def, p)
         if not p.runTime or p.runTime > c.maxSeconds then return false end
     end
 
+    -- Sealed variant of inZone: the zone list ships as hashes.
+    if c.inZoneH then
+        def._inZoneHSet = def._inZoneHSet or (function()
+            local s = {}; for _, z in ipairs(c.inZoneH) do s[z] = true end; return s
+        end)()
+        local okZone = (p.zone and def._inZoneHSet[ns.Util.HashString(p.zone)])
+                    or (p.subZone and def._inZoneHSet[ns.Util.HashString(p.subZone)])
+        if not okZone then return false end
+    end
+
     -- The kill must happen in one of these zones (zone or subzone text).
     -- Needed when different creatures share a name (e.g. Princess the RFK boss
     -- vs. Princess the Elwynn pig).
@@ -129,6 +157,9 @@ local function KillQualifies(def, p)
         end
     end
 
+    -- Fully qualified: NOW it's safe to unseal (the COMPLETED callback then
+    -- records def._sealK for the discovery broadcast).
+    if sealKey then ns.RevealHidden(def, sealKey) end
     return true
 end
 
@@ -172,6 +203,23 @@ end)
 -- payload: { zone, subZone, minimapZone }
 ----------------------------------------------------------------------
 Engine:RegisterTrigger("EXPLORE", function(def, p)
+    -- Sealed zone matching (hidden secrets): candidates ship only as hashes;
+    -- the matching zone name itself unwraps the master key and reveals the def.
+    if def.conditions.matchers then
+        for _, name in ipairs({ p.subZone, p.zone, p.minimapZone }) do
+            if name and name ~= "" then
+                local hash = ns.Util.HashString(name)
+                for _, m in ipairs(def.conditions.matchers) do
+                    if m.h == hash then
+                        ns.RevealHidden(def, ns.Util.SealXor(m.w, name))
+                        return true
+                    end
+                end
+            end
+        end
+        return false
+    end
+
     local zones = def.conditions.zones
     if not zones then return false end
     def._zoneSet = def._zoneSet or NumberSet(zones)  -- string keys work fine
@@ -290,4 +338,15 @@ end)
 ----------------------------------------------------------------------
 Engine:RegisterTrigger("META", function(def, p)
     return true
+end)
+
+----------------------------------------------------------------------
+-- Hidden-secret bookkeeping. Registered HERE (before the UI modules load)
+-- so a sealed achievement is revealed before the toast renders it, and the
+-- earner is recorded as a candidate first-discoverer.
+----------------------------------------------------------------------
+Engine:RegisterCallback("COMPLETED", function(id, def)
+    if not def.hidden then return end
+    if def.sealed then ns.TryRevealHidden(def, def._sealK) end
+    ns.DB:RecordDiscovery(id, ns.Util.PlayerKey(), time(), def._sealK)
 end)

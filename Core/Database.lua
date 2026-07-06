@@ -395,12 +395,17 @@ function DB:GetDiscovery(id)
     return d
 end
 
--- Returns true if this became the new earliest-known discovery.
-function DB:RecordDiscovery(id, name, t)
+-- Returns true if this became the new earliest-known discovery. `k` is the
+-- seal key that unmasks a sealed hidden achievement; it is kept even when the
+-- discoverer credit itself is not new (so late-heard keys still unseal).
+function DB:RecordDiscovery(id, name, t, k)
     t = t or time()
     local cur = self.account.discoveries[id]
-    if cur and (cur.t or 0) <= t then return false end
-    self.account.discoveries[id] = { name = name, t = t }
+    if cur and (cur.t or 0) <= t then
+        if k and not cur.k then cur.k = k end
+        return false
+    end
+    self.account.discoveries[id] = { name = name, t = t, k = k or (cur and cur.k) }
     if ns.UI then ns.UI:Refresh() end
     return true
 end

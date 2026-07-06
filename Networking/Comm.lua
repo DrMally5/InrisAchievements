@@ -224,17 +224,26 @@ end
 function Comm:AnnounceEarned(id)
     if not ns.DB:Settings().announce then return end
     local channel = BroadcastChannel()
-    if channel then self:Send(OP.EARNED, tostring(id), channel) end
+    if not channel then return end
+    -- Sealed hidden achievements carry their seal key, so hearing about a
+    -- discovery is what unmasks the achievement for everyone in earshot.
+    local def = ns.GetAchievement(id)
+    local k = (def and def.hidden and def._sealK) or ""
+    self:Send(OP.EARNED, Util.PackFields(tostring(id), k), channel)
 end
 
 local function HandleEarned(sender, rest)
-    local def = ns.GetAchievement(rest)
+    local id, k = Util.UnpackFields(rest)   -- old clients sent a bare id; k is nil
+    local def = ns.GetAchievement(id)
     if not def then return end
+    if k == "" then k = nil end
 
     -- Hidden achievements: whoever we hear earned it first becomes its known
-    -- discoverer (recorded even if the local player has announcements off).
+    -- discoverer (recorded even if the local player has announcements off),
+    -- and the carried key unmasks a sealed def on the spot.
     if def.hidden then
-        ns.DB:RecordDiscovery(def.id, Util.NormalizeName(sender), time())
+        if def.sealed then ns.TryRevealHidden(def, k) end
+        ns.DB:RecordDiscovery(def.id, Util.NormalizeName(sender), time(), k)
     end
 
     if not ns.DB:Settings().announce or not ns.AnnounceEarned then return end

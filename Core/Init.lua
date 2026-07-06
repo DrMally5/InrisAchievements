@@ -187,6 +187,17 @@ local function Boot()
 
     ns.DB:Initialize()
     ns.DB:Prune()   -- drop orphaned progress (e.g. removed test achievements)
+
+    -- Re-reveal sealed hidden achievements that are already discovered (the
+    -- seal key persists with the discovery record / completion).
+    for _, def in ipairs(ns.Achievements) do
+        if def.sealed then
+            local d = ns.DB.account.discoveries[def.id]
+            if d or ns.DB:IsCompleted(def.id) then
+                ns.TryRevealHidden(def, d and d.k)
+            end
+        end
+    end
     ns.Events:Enable()
     ns.Comm:Enable()
     ns.Inspect:HookUnitMenu()

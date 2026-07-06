@@ -121,6 +121,75 @@ function Util.HashString(s)
 end
 
 ----------------------------------------------------------------------
+-- Sealed secrets (hidden achievements)
+--
+-- Hidden achievements ship with their name/description/icon encrypted
+-- ("sealed") so reading the source doesn't spoil them. The decode key is the
+-- secret itself (the zone or mob name that triggers it) - unwrapped the
+-- moment someone actually does the thing - or a static per-id key for
+-- mechanic-based secrets whose conditions must stay readable.
+-- Mirrored exactly by the build-time sealer (kept outside the repo).
+----------------------------------------------------------------------
+local function Djb2(s)
+    local h = 5381
+    for i = 1, #s do h = (h * 33 + s:byte(i)) % 4294967296 end
+    return h
+end
+
+-- Park-Miller keystream: stays within 2^53 double precision, so Lua and the
+-- Python sealer produce identical bytes.
+local function SealStream(key, n)
+    local s = (Djb2(key) % 2147483646) + 1
+    local out = {}
+    for i = 1, n do
+        s = (s * 16807) % 2147483647
+        out[i] = math.floor(s / 128) % 256
+    end
+    return out
+end
+
+-- XOR a hex blob with the keystream for `key`; returns the raw string.
+function Util.SealXor(hex, key)
+    if type(hex) ~= "string" or #hex % 2 ~= 0 or type(key) ~= "string" then return nil end
+    local n = #hex / 2
+    local ks = SealStream(key, n)
+    local out = {}
+    for i = 1, n do
+        local b = tonumber(hex:sub(i * 2 - 1, i * 2), 16)
+        if not b then return nil end
+        out[i] = string.char(bit.bxor(b, ks[i]))
+    end
+    return table.concat(out)
+end
+
+-- Decode a sealed def with `key`. Fills in the real name/description/icon
+-- (and title text) on success. Wrong keys fail the magic-prefix check.
+function ns.RevealHidden(def, key)
+    if not def or not def.sealed then return false end
+    if def.revealed then return true end
+    if not key or key == "" then return false end
+    local plain = Util.SealXor(def.sealed, key)
+    if not plain or plain:sub(1, 4) ~= "IA1\31" then return false end
+    local name, desc, icon, titleText = strsplit("\31", plain:sub(5))
+    if not name or name == "" then return false end
+    def.name, def.description = name, desc or ""
+    if icon and icon ~= "" then def.icon = icon end
+    if def.title and titleText and titleText ~= "" then def.title.text = titleText end
+    def.revealed, def._sealK = true, key
+    if ns.UI then ns.UI:Refresh() end
+    return true
+end
+
+-- Try a carried key first (from a trigger match or a discovery broadcast),
+-- then the static per-id key used by mechanic-based secrets.
+function ns.TryRevealHidden(def, key)
+    if not def or not def.sealed then return false end
+    if def.revealed then return true end
+    if key and ns.RevealHidden(def, key) then return true end
+    return ns.RevealHidden(def, def.id .. "::InriSeal1")
+end
+
+----------------------------------------------------------------------
 -- Table helpers
 ----------------------------------------------------------------------
 function Util.Count(t)
