@@ -427,7 +427,18 @@ local handlers = {
     ZONE_CHANGED_INDOORS        = OnZoneChanged,
     ZONE_CHANGED_NEW_AREA       = OnZoneChanged,
     PLAYER_ENTERING_WORLD       = function() UpdateInstance(); RefreshGroupGUIDs() end,
-    GROUP_ROSTER_UPDATE         = function() RefreshGroupGUIDs() end,
+    GROUP_ROSTER_UPDATE         = function()
+        RefreshGroupGUIDs()
+        -- Introduce ourselves to a new group (throttled): this is how
+        -- summaries and hidden-achievement discoveries hop between guilds.
+        if IsInGroup() and ns.Comm then
+            local now = GetTime()
+            if (now - (ns.Comm._lastGroupHello or 0)) > 60 then
+                ns.Comm._lastGroupHello = now
+                C_Timer.After(2, function() ns.Comm:Hello() end)
+            end
+        end
+    end,
     TIME_PLAYED_MSG             = function(total) OnTimePlayed(total) end,
     UPDATE_FACTION              = ScanFactions,
     SKILL_LINES_CHANGED         = ScanSkills,
