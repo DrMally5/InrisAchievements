@@ -35,15 +35,55 @@ local function CacheUnit(unit)
         level          = UnitLevel(unit),
         classification = UnitClassification(unit),
         name           = UnitName(unit),
+        -- Tap state: true if this mob is tapped by someone else (we'd get no
+        -- loot/XP). Sampled whenever we see the unit; used to reject kill
+        -- credit for mobs we merely witnessed dying. Missing API -> treat as
+        -- ours (falls back to the damage check below).
+        tapDenied      = UnitIsTapDenied and UnitIsTapDenied(unit) or false,
         t              = GetTime(),
     }
 end
 
--- Occasional prune so the cache can't grow without bound.
+----------------------------------------------------------------------
+-- Kill-credit fairness ledger: which creatures WE (player, pet, or a group
+-- member) actually dealt damage to. UNIT_DIED fires for every nearby death,
+-- so without this a mob someone else killed - that we merely poked or stood
+-- near - would grant its achievement.
+----------------------------------------------------------------------
+local damagedByUs = {}      -- [guid] = GetTime()
+local DAMAGE_TTL  = 60
+
+local groupGUIDs = {}       -- GUIDs of group members and their pets
+local function RefreshGroupGUIDs()
+    wipe(groupGUIDs)
+    local prefix = IsInRaid() and "raid" or "party"
+    for i = 1, (GetNumGroupMembers() or 0) do
+        local g  = UnitGUID(prefix .. i);          if g  then groupGUIDs[g]  = true end
+        local pg = UnitGUID(prefix .. i .. "pet"); if pg then groupGUIDs[pg] = true end
+    end
+end
+
+local function WeDamaged(srcGUID)
+    if not srcGUID then return false end
+    return srcGUID == UnitGUID("player")
+        or srcGUID == UnitGUID("pet")
+        or groupGUIDs[srcGUID] == true
+end
+
+local DAMAGE_SUB = {
+    SWING_DAMAGE = true, RANGE_DAMAGE = true, SPELL_DAMAGE = true,
+    SPELL_PERIODIC_DAMAGE = true, SPELL_BUILDING_DAMAGE = true,
+    DAMAGE_SHIELD = true, DAMAGE_SPLIT = true,
+}
+
+-- Occasional prune so the caches can't grow without bound.
 local function PruneCache()
     local now = GetTime()
     for guid, info in pairs(unitCache) do
         if now - info.t > CACHE_TTL then unitCache[guid] = nil end
+    end
+    for guid, t in pairs(damagedByUs) do
+        if now - t > DAMAGE_TTL then damagedByUs[guid] = nil end
     end
 end
 
@@ -162,11 +202,30 @@ local function OnUnitDied(destGUID, destName)
     -- Only meaningful for specific-target achievements; KillQualifies rejects
     -- broad ones when source == "UNIT_DIED".
     if not Util.NpcIDFromGUID(destGUID) then return end
+
+    -- Fairness gate: UNIT_DIED fires for ANY nearby death. Credit it only if it
+    -- was genuinely our kill - we (or our group) damaged it AND it wasn't
+    -- tapped by someone else. A clean solo/group kill also arrives via
+    -- PARTY_KILL (unconditional), so this path only rescues the cases where no
+    -- killing blow reached us (contested world bosses, odd pet last-hits).
+    local dmgT = damagedByUs[destGUID]
+    if not dmgT or (GetTime() - dmgT) > DAMAGE_TTL then return end
+    local cached = unitCache[destGUID]
+    if not cached or cached.tapDenied then return end
+
     Engine:Dispatch("KILL", BuildKillPayload(destGUID, destName, "UNIT_DIED"))
 end
 
 local function OnCombatLog()
-    local _, sub, _, _, _, _, _, destGUID, destName = CombatLogGetCurrentEventInfo()
+    local _, sub, _, srcGUID, _, _, _, destGUID, destName = CombatLogGetCurrentEventInfo()
+
+    -- Record our own damage so UNIT_DIED can tell a real kill from a witnessed
+    -- one. (Damage events far outnumber deaths, so this returns early.)
+    if DAMAGE_SUB[sub] then
+        if destGUID and WeDamaged(srcGUID) then damagedByUs[destGUID] = GetTime() end
+        return
+    end
+
     if sub == "PARTY_KILL" then
         -- Enemy players route to the PvP trigger, not the creature-kill path.
         if destGUID and destGUID:find("^Player%-") then
@@ -316,7 +375,8 @@ local handlers = {
     ZONE_CHANGED                = OnZoneChanged,
     ZONE_CHANGED_INDOORS        = OnZoneChanged,
     ZONE_CHANGED_NEW_AREA       = OnZoneChanged,
-    PLAYER_ENTERING_WORLD       = function() UpdateInstance() end,
+    PLAYER_ENTERING_WORLD       = function() UpdateInstance(); RefreshGroupGUIDs() end,
+    GROUP_ROSTER_UPDATE         = function() RefreshGroupGUIDs() end,
     TIME_PLAYED_MSG             = function(total) OnTimePlayed(total) end,
     UPDATE_FACTION              = ScanFactions,
     SKILL_LINES_CHANGED         = ScanSkills,
@@ -341,6 +401,8 @@ function Events:Enable()
             if not ok then Util.Print("|cffff4444event error|r [" .. event .. "]:", err) end
         end
     end)
+
+    RefreshGroupGUIDs()
 
     -- Light periodic cache prune.
     C_Timer.NewTicker(CACHE_TTL, PruneCache)
