@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.1.0] - 2026-07-06
+Legendary weapons, boss feats, and networked profiles.
+
+### Added
+- **Legendary weapon achievements** - claim Thunderfury, Sulfuras, or Atiesh
+  and it's recognised the moment the finished weapon is in your hands (equipped,
+  bags, or bank). Each grants a Legendary title.
+- **"The Hard Way"** - solo-kill feats for six classic dungeon end bosses
+  (VanCleef, Herod, Arugal, Mutanus, Thermaplugg, Emperor Thaurissan), honestly
+  gated: an outside player's help voids the attempt.
+- **Networked profiles redesigned** - right-click a player -> View Achievements
+  now shows a scrollable list of their earned achievements with icons and
+  rarity, not just plain text.
+- **`/ia here`** - lists everything still earnable around your current location.
+- **`/ia config`** - readable settings list with live ON/OFF states.
+- Achievement links in chat are now genuinely clickable (open straight to the
+  achievement), including guild-broadcast names for fellow addon users.
+- Auto-sync when you join a group, so hidden-achievement discoveries spread
+  between guilds through pugs.
+- The addon version now shows in the window corner.
+- 255 achievements total.
+
+### Changed
+- The "Creator" title is now a standalone title rather than an achievement
+  (the old "Make This Addon" achievement was a touch smug and has been removed).
+
+### Fixed
+- Networked profiles showed no achievements (an ID-list encoding dropped every
+  entry) - the whole per-player breakdown, notable list, and recents now work.
+- Other addon users' titles and points now appear on their unit tooltip and
+  nameplate, not only your own.
+- Legendary weapons are detected even while equipped.
+
+
 ## [1.0.1] - 2026-07-06
 The fairness & secrets update.
 
