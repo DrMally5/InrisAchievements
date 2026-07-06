@@ -105,7 +105,7 @@ ns.LOGO = "Interface\\AddOns\\InrisAchievements\\Assets\\Logo.tga"
 -- Where bug reports should be pasted.
 ns.BUGREPORT_URL = "https://github.com/DrMally5/InrisAchievements/issues"
 
--- djb2 hashes of the creator's Battle.net tag(s) (see /ia whoami). Any account
+-- djb2 hashes of the creator's Battle.net tag(s). Any account
 -- whose hash is in this set unlocks the standalone "the Creator" title - there
 -- is no visible achievement for it (that would be a bit smug). Multiple entries
 -- let the author cover more than one Battle.net account.
