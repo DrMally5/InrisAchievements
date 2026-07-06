@@ -341,6 +341,14 @@ local function OnQuestTurnedIn(questID)
 end
 
 ----------------------------------------------------------------------
+-- Items (legendary-weapon feats). Cheap: only ITEM-trigger achievements are
+-- visited, and there are a handful.
+----------------------------------------------------------------------
+local function ScanItems()
+    Engine:Dispatch("ITEM", {})
+end
+
+----------------------------------------------------------------------
 -- /played speed-leveling. On a ding we ask the server for total played time
 -- and feed it into TIMED_LEVEL. RequestTimePlayed() normally spams two yellow
 -- chat lines, so we briefly suppress those.
@@ -389,6 +397,7 @@ function Events:InitialScan()
     OnZoneChanged()
     ScanFactions()
     ScanSkills()
+    ScanItems()
     ns._suppressNotify = false
 
     -- Creator check: delayed because Battle.net info isn't always available
@@ -444,6 +453,8 @@ local handlers = {
     SKILL_LINES_CHANGED         = ScanSkills,
     CHAT_MSG_SKILL              = ScanSkills,
     QUEST_TURNED_IN             = function(questID) OnQuestTurnedIn(questID) end,
+    PLAYER_EQUIPMENT_CHANGED    = ScanItems,
+    BAG_UPDATE_DELAYED          = ScanItems,
     PLAYER_LEVEL_UP             = function(level) OnLevelUp(level) end,
     -- Extras owns death handling (deathless knell fires BEFORE the death is
     -- recorded); falls back to plain bookkeeping if Extras is absent.

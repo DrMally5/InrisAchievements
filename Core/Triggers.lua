@@ -327,6 +327,20 @@ Engine:RegisterTrigger("PVPKILL", function(def, p)
 end)
 
 ----------------------------------------------------------------------
+-- ITEM: the player owns a specific item (equipped, bags, or bank). Used for
+-- legendary-weapon feats. Dispatched on equipment/bag changes and login.
+-- payload: none - the trigger queries GetItemCount itself.
+----------------------------------------------------------------------
+Engine:RegisterTrigger("ITEM", function(def, p)
+    local ids = def.conditions.itemIDs
+    if not ids or not GetItemCount then return false end
+    for _, itemID in ipairs(ids) do
+        if (GetItemCount(itemID, true) or 0) > 0 then return true end  -- true = include bank
+    end
+    return false
+end)
+
+----------------------------------------------------------------------
 -- CREATOR: matches the addon author's Battle.net account (hash of the
 -- battletag, so the tag itself never ships in code). Covers every character
 -- on that account automatically.

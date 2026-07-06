@@ -128,3 +128,39 @@ A{
     title = { text = "Champion of Azeroth", rarity = R.LEGENDARY },
     requires = { "leg_onyxia", "leg_ragnaros", "leg_nefarian", "leg_cthun", "leg_kelthuzad" },
 }
+
+----------------------------------------------------------------------
+-- Legendary weapons - the three great crafted/assembled arms of Azeroth.
+-- Detected by ownership (equipped, bags, or bank) via the ITEM trigger, so
+-- the achievement fires the moment the finished weapon is in your hands.
+----------------------------------------------------------------------
+A{
+    id = "leg_thunderfury", name = "Blessed Blade of the Windseeker",
+    description = "Claim Thunderfury - forge both Bindings and defeat Prince Thunderaan.",
+    category = "LEGENDARY", subcategory = "Legendary Weapons",
+    rarity = R.LEGENDARY, trigger = "ITEM",
+    icon = "Interface\Icons\INV_Sword_39",
+    title = { text = "the Windseeker", rarity = R.LEGENDARY },
+    conditions = { itemIDs = { 19019 } },
+}
+
+A{
+    id = "leg_sulfuras", name = "Hand of Ragnaros",
+    description = "Forge Sulfuras from the Eye of Sulfuras and the Sulfuron Hammer.",
+    category = "LEGENDARY", subcategory = "Legendary Weapons",
+    rarity = R.LEGENDARY, trigger = "ITEM",
+    icon = "Interface\Icons\INV_Hammer_Unique_Sulfuras",
+    title = { text = "Hand of Ragnaros", rarity = R.LEGENDARY },
+    conditions = { itemIDs = { 17182 } },
+}
+
+A{
+    id = "leg_atiesh", name = "Greatstaff of the Guardian",
+    description = "Reassemble Atiesh, the staff of the Guardian of Tirisfal.",
+    category = "LEGENDARY", subcategory = "Legendary Weapons",
+    rarity = R.LEGENDARY, trigger = "ITEM",
+    icon = "Interface\Icons\INV_Staff_Medivh",
+    title = { text = "the Guardian", rarity = R.LEGENDARY },
+    -- Mage / Warlock / Priest / Druid variants of the finished staff.
+    conditions = { itemIDs = { 22589, 22630, 22631, 22632 } },
+}

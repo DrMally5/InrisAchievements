@@ -38,6 +38,7 @@ Definitions\Ach_Legends.lua
 Definitions\Ach_RareMobs.lua
 Definitions\Ach_EliteQuests.lua
 Definitions\Ach_Dungeons.lua
+Definitions\Ach_BossFeats.lua
 Definitions\Ach_Speedrun.lua
 Definitions\Ach_Exploration.lua
 Definitions\Ach_Class.lua
