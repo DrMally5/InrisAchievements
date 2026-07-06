@@ -400,17 +400,16 @@ function Events:InitialScan()
     ScanItems()
     ns._suppressNotify = false
 
-    -- Creator check: delayed because Battle.net info isn't always available
-    -- immediately at login; deliberately after the suppress window so the
-    -- toast shows the first time it's earned.
+    -- Creator-account hygiene: delayed because Battle.net info isn't always
+    -- available immediately at login. The author's account sheds any hidden
+    -- completions/credits so the community discovery race stays pure; the
+    -- "the Creator" title is offered separately via the title picker.
     C_Timer.After(5, function()
-        Engine:Dispatch("CREATOR", {})
-        -- Creator-account hygiene: shed all hidden completions/credits except
-        -- "Make This Addon" so the discovery race stays pure.
         if BNGetInfo then
             local _, tag = BNGetInfo()
             if tag and Util.HashString(tag) == ns.CREATOR_HASH then
                 ns.DB:CreatorHiddenScrub()
+                if ns.TitlesUI then ns.TitlesUI:Refresh() end
             end
         end
     end)

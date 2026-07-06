@@ -321,7 +321,15 @@ function DB:Prune()
         end
     end
 
-    if self.char.activeTitle and not ns.GetAchievement(self.char.activeTitle) then
+    -- Migrate the old creator achievement's title to the standalone one so a
+    -- creator who had it equipped keeps wearing it.
+    if self.char.activeTitle == "hidden_creator" then
+        self.char.activeTitle = ns.CREATOR_TITLE.id
+    end
+    -- Clear a stored title whose granting achievement no longer exists (but
+    -- never the synthetic creator title, which has no achievement).
+    if self.char.activeTitle and self.char.activeTitle ~= ns.CREATOR_TITLE.id
+       and not ns.GetAchievement(self.char.activeTitle) then
         self.char.activeTitle = nil
     end
 
@@ -386,13 +394,7 @@ end
 -- gossip-based, not an authoritative server-first record.
 ----------------------------------------------------------------------
 function DB:GetDiscovery(id)
-    local d = self.account.discoveries[id]
-    -- The Creator's own achievement is always credited to the author's main,
-    -- no matter which of their characters happened to earn it first.
-    if d and id == "hidden_creator" then
-        return { name = ns.CREATOR_NAME, t = d.t }
-    end
-    return d
+    return self.account.discoveries[id]
 end
 
 -- Returns true if this became the new earliest-known discovery. `k` is the
@@ -413,10 +415,9 @@ end
 ----------------------------------------------------------------------
 -- Creator-account hygiene: the author mass-earned everything before release,
 -- which would have "discovered" every hidden achievement at once. To keep the
--- community's discovery race pure, the creator's account holds ONLY
--- "Make This Addon" among hidden achievements - the rest are shed at login
--- (completions refunded, own-name discovery credits removed). Runs only when
--- the account's battletag hash matches ns.CREATOR_HASH.
+-- community's discovery race pure, the creator's account sheds ALL hidden
+-- completions at login (refunded) and drops any of its own hidden-discovery
+-- credits. Runs only when the account's battletag hash matches CREATOR_HASH.
 ----------------------------------------------------------------------
 function DB:CreatorHiddenScrub()
     local own = {}
@@ -424,7 +425,7 @@ function DB:CreatorHiddenScrub()
     for key in pairs(self.account.alts or {}) do own[key] = true end
 
     for _, def in ipairs(ns.Achievements) do
-        if def.hidden and def.id ~= "hidden_creator" then
+        if def.hidden then
             if self:IsCompleted(def.id) then
                 self:Uncomplete(def.id)
             end

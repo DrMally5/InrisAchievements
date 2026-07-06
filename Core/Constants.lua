@@ -105,13 +105,27 @@ ns.LOGO = "Interface\\AddOns\\InrisAchievements\\Assets\\Logo.tga"
 -- Where bug reports should be pasted.
 ns.BUGREPORT_URL = "https://github.com/DrMally5/InrisAchievements/issues"
 
--- djb2 hash of the creator's Battle.net tag (see /ia whoami). Grants the
--- "Make This Addon" achievement on every character of that account.
+-- djb2 hash of the creator's Battle.net tag (see /ia whoami). Unlocks the
+-- standalone "the Creator" title on every character of that account - there
+-- is no visible achievement for it (that would be a bit smug).
 ns.CREATOR_HASH = "af2930b8"
-
--- The name the Creator achievement's discovery credit always displays,
--- regardless of which of the author's characters earned it first.
 ns.CREATOR_NAME = "Inrii-Soulseeker"
+
+-- The creator-only title. Not tied to any achievement; offered in the title
+-- picker only when the running account matches CREATOR_HASH. Its synthetic id
+-- distinguishes it from achievement-granted titles.
+ns.CREATOR_TITLE = { id = "__creator", text = "the Creator", rarity = 4 }  -- 4 = LEGENDARY
+
+-- True only on the addon author's Battle.net account. Cached once the tag is
+-- available (BNGetInfo can be nil for a moment at login).
+function ns.IsCreator()
+    if ns._isCreator ~= nil then return ns._isCreator end
+    if not BNGetInfo then return false end
+    local _, tag = BNGetInfo()
+    if not tag then return false end   -- unknown yet; don't cache a false
+    ns._isCreator = ns.Util and (ns.Util.HashString(tag) == ns.CREATOR_HASH) or false
+    return ns._isCreator
+end
 
 -- Inline gold star (the raid-target icon). The Unicode star U+2605 is NOT in
 -- WoW's default font and renders as an empty box - use this texture instead.

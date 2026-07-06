@@ -148,7 +148,7 @@ local function HandleSlash(msg)
         local tag = BNGetInfo and (select(2, BNGetInfo()))
         if tag then
             Util.Print("Account hash: |cffffd100" .. Util.HashString(tag) .. "|r")
-            Util.Print("Set this as CREATOR_HASH in Core\\Constants.lua to claim 'Make This Addon'.")
+            Util.Print("Set this as CREATOR_HASH in Core\\Constants.lua to unlock the 'the Creator' title.")
         else
             Util.Print("Battle.net info not available right now - try again in a moment.")
         end

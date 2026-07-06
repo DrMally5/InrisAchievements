@@ -66,13 +66,6 @@ A{
     requires = { "explore_landsend", "explore_uldum" },
 }
 
--- Only one account in the world can earn this one. Not sealed: its existence
--- IS the flavor, and its trigger cannot be replicated.
-A{
-    id = "hidden_creator", name = "Make This Addon",
-    description = "Build Inri's Achievements! from nothing. There is exactly one way to earn this.",
-    category = "HIDDEN", subcategory = "Secrets",
-    rarity = R.LEGENDARY, trigger = "CREATOR", hidden = true,
-    icon = "Interface\\Icons\\INV_Misc_Gear_01",
-    title = { text = "the Creator", rarity = R.LEGENDARY },
-}
+-- (There is deliberately no "creator" achievement - it read as smug. The
+-- author's account instead unlocks the standalone "the Creator" title, offered
+-- only in the title picker on that account. See ns.CREATOR_TITLE / IsCreator.)

@@ -54,8 +54,19 @@ end
 ----------------------------------------------------------------------
 -- Queries
 ----------------------------------------------------------------------
+-- The creator-only title, if this account is the author's; else nil.
+local function CreatorEntry()
+    if ns.IsCreator and ns.IsCreator() then
+        local c = ns.CREATOR_TITLE
+        return { id = c.id, text = c.text, rarity = c.rarity }
+    end
+    return nil
+end
+
 function Titles:GetUnlocked()
     local out = {}
+    local creator = CreatorEntry()
+    if creator then out[#out + 1] = creator end
     for _, def in ipairs(self:Index()) do
         if ns.DB:IsCompleted(def.id) then
             out[#out + 1] = { id = def.id, text = def.title.text, rarity = TitleRarity(def) }
@@ -71,6 +82,9 @@ end
 function Titles:GetActive()
     local id = ns.DB:GetActiveTitleID()
     if not id then return nil end
+    if id == ns.CREATOR_TITLE.id then
+        return CreatorEntry()   -- nil if this isn't the creator's account
+    end
     local def = ns.GetAchievement(id)
     if not def or not def.title or not ns.DB:IsCompleted(id) then return nil end
     return { id = id, text = def.title.text, rarity = TitleRarity(def) }
@@ -82,6 +96,9 @@ end
 function Titles:SetActive(id)
     if id == nil then
         ns.DB:SetActiveTitleID(nil)
+    elseif id == ns.CREATOR_TITLE.id then
+        if not (ns.IsCreator and ns.IsCreator()) then return false end
+        ns.DB:SetActiveTitleID(id)
     else
         local def = ns.GetAchievement(id)
         if def and def.title and ns.DB:IsCompleted(id) then
