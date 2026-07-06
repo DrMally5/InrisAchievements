@@ -599,6 +599,12 @@ local function BuildFrame()
     local close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
     close:SetPoint("TOPRIGHT", -8, -8)
 
+    -- Small version stamp, bottom-right corner (handy for bug reports).
+    local ver = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+    ver:SetPoint("BOTTOMRIGHT", -16, 14)
+    ver:SetText("v" .. ns.VERSION)
+    ver:SetTextColor(0.5, 0.5, 0.5)
+
     -- Points (top-right), with a trophy-ish icon.
     UI.points = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormalHuge")
     UI.points:SetPoint("TOPRIGHT", -46, -16)

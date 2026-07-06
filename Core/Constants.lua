@@ -8,9 +8,16 @@
 local _, ns = ...
 
 ns.ADDON_NAME    = "InrisAchievements"
-ns.VERSION       = "1.0.0"
--- Numeric version for fast comparison in networking ("1.0.0" -> 10000).
-ns.VERSION_NUM   = 10000
+
+-- Version is read from the .toc so it can never drift from what's shipped.
+local meta = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
+ns.VERSION = (meta and meta(ns.ADDON_NAME, "Version")) or "0.0.0"
+-- Numeric form for fast comparison in networking ("1.0.1" -> 10001).
+local maj, min, pat = ns.VERSION:match("(%d+)%.(%d+)%.?(%d*)")
+ns.VERSION_NUM = (tonumber(maj) or 0) * 10000
+             + (tonumber(min) or 0) * 100
+             + (tonumber(pat) or 0)
+
 ns.COMM_PREFIX   = "INRIACH"   -- max 16 chars for RegisterAddonMessagePrefix
 
 ----------------------------------------------------------------------
