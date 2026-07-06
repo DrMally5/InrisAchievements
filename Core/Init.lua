@@ -200,7 +200,22 @@ local function HandleSlash(msg)
             s.muteGuildFlex = not s.muteGuildFlex
             Util.Print("Hide others' flex lines: " .. (s.muteGuildFlex and "ON" or "OFF"))
         else
-            Util.Print("Config: /ia config sound | toast | guild | announce | radar | screenshot | guildflex | muteflex")
+            -- No (or unknown) option: show every toggle with its current
+            -- state and what it does.
+            local function line(opt, on, desc)
+                Util.Print(string.format("  |cffffd100%s|r %s |cff808080- %s|r",
+                    opt, on and "|cff40ff40ON|r" or "|cffff4040OFF|r", desc))
+            end
+            Util.Print("Toggle with |cffffd100/ia config <option>|r:")
+            line("toast",      s.toast,         "achievement popup banners")
+            line("sound",      s.toastSound,    "toast sound effects")
+            line("announce",   s.announce,      "chat lines when achievements are earned")
+            line("guild",      s.shareGuild,    "share your progress with guildmates")
+            line("guildflex",  s.guildFlex,     "post Rare+ earns to real guild chat (everyone sees)")
+            line("muteflex",   s.muteGuildFlex, "hide other addon users' flex lines (you get the clickable version)")
+            line("radar",      s.radar,         "ping when a named mob you still need is nearby")
+            line("screenshot", s.screenshot,    "auto-screenshot on Epic+ earns")
+            Util.Print("|cff808080Also in Interface Options > AddOns > Inri's Achievements.|r")
         end
 
     elseif cmd == "reset" then
