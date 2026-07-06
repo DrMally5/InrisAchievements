@@ -40,6 +40,54 @@ local function HandleSlash(msg)
     elseif cmd == "flex" then
         ns.Extras:Flex()
 
+    elseif cmd == "here" then
+        -- What's still earnable around your current location. Matches explicit
+        -- zone conditions, staged zone keys, zone-named subcategories, and
+        -- zone mentions in descriptions (our texts name their places).
+        local zone, sub = GetRealZoneText() or "", GetSubZoneText() or ""
+        local hits = {}
+        for _, def in ipairs(ns.Achievements) do
+            if not ns.DB:IsCompleted(def.id)
+               and not (def.hidden and not ns.DB:GetDiscovery(def.id)) then
+                local c = def.conditions or {}
+                local match = false
+                for _, z in ipairs(c.zones or {}) do
+                    if z == zone or (sub ~= "" and z == sub) then match = true end
+                end
+                if not match then
+                    for _, z in ipairs(c.inZone or {}) do
+                        if z == zone or (sub ~= "" and z == sub) then match = true end
+                    end
+                end
+                if not match and def.stages then
+                    for _, s in ipairs(def.stages) do
+                        if s.key == zone or (sub ~= "" and s.key == sub) then match = true end
+                    end
+                end
+                if not match and def.subcategory and zone ~= "" then
+                    if def.subcategory:find(zone, 1, true)
+                       or zone:find(def.subcategory, 1, true) then match = true end
+                end
+                if not match and zone ~= "" and def.description
+                   and def.description:find(zone, 1, true) then match = true end
+                if match then hits[#hits + 1] = def end
+            end
+        end
+        table.sort(hits, function(a, b)
+            if a.rarity ~= b.rarity then return a.rarity > b.rarity end
+            return a.name < b.name
+        end)
+        if #hits == 0 then
+            Util.Print("Nothing left to earn in " .. (zone ~= "" and zone or "this area") .. ".")
+        else
+            Util.Print("|cffffd100Still to earn in " .. zone .. ":|r")
+            for i = 1, math.min(#hits, 15) do
+                local d = hits[i]
+                Util.Print("  " .. ns.AchievementLink(d) .. " |cff808080" .. d.points .. " pts|r")
+            end
+            if #hits > 15 then Util.Print("  ...and " .. (#hits - 15) .. " more.") end
+        end
+
     elseif cmd == "icons" then
         -- Audit every icon path against the client's file database.
         if not GetFileIDFromPath then
@@ -166,6 +214,7 @@ local function HandleSlash(msg)
 
     else
         Util.Print(L["SLASH_HELP_HEADER"])
+        Util.Print("/ia here - what you can still earn around you")
         Util.Print(L["SLASH_OPEN"]); Util.Print(L["SLASH_SEARCH"])
         Util.Print(L["SLASH_STATS"]); Util.Print(L["SLASH_SYNC"])
         Util.Print(L["SLASH_TITLE"]); Util.Print(L["SLASH_BUG"])
