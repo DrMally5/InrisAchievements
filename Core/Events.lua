@@ -407,7 +407,7 @@ function Events:InitialScan()
     C_Timer.After(5, function()
         if BNGetInfo then
             local _, tag = BNGetInfo()
-            if tag and Util.HashString(tag) == ns.CREATOR_HASH then
+            if tag and ns.CREATOR_HASHES[Util.HashString(tag)] then
                 ns.DB:CreatorHiddenScrub()
                 if ns.TitlesUI then ns.TitlesUI:Refresh() end
             end

@@ -105,10 +105,14 @@ ns.LOGO = "Interface\\AddOns\\InrisAchievements\\Assets\\Logo.tga"
 -- Where bug reports should be pasted.
 ns.BUGREPORT_URL = "https://github.com/DrMally5/InrisAchievements/issues"
 
--- djb2 hash of the creator's Battle.net tag (see /ia whoami). Unlocks the
--- standalone "the Creator" title on every character of that account - there
--- is no visible achievement for it (that would be a bit smug).
-ns.CREATOR_HASH = "af2930b8"
+-- djb2 hashes of the creator's Battle.net tag(s) (see /ia whoami). Any account
+-- whose hash is in this set unlocks the standalone "the Creator" title - there
+-- is no visible achievement for it (that would be a bit smug). Multiple entries
+-- let the author cover more than one Battle.net account.
+ns.CREATOR_HASHES = {
+    ["af2930b8"] = true,
+    ["18229708"] = true,
+}
 ns.CREATOR_NAME = "Inrii-Soulseeker"
 
 -- The creator-only title. Not tied to any achievement; offered in the title
@@ -123,7 +127,7 @@ function ns.IsCreator()
     if not BNGetInfo then return false end
     local _, tag = BNGetInfo()
     if not tag then return false end   -- unknown yet; don't cache a false
-    ns._isCreator = ns.Util and (ns.Util.HashString(tag) == ns.CREATOR_HASH) or false
+    ns._isCreator = (ns.Util and ns.CREATOR_HASHES[ns.Util.HashString(tag)]) and true or false
     return ns._isCreator
 end
 

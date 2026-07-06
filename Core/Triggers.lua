@@ -357,7 +357,7 @@ Engine:RegisterTrigger("CREATOR", function(def, p)
     if not BNGetInfo then return false end
     local _, battleTag = BNGetInfo()
     if not battleTag then return false end
-    return ns.Util.HashString(battleTag) == ns.CREATOR_HASH
+    return ns.CREATOR_HASHES[ns.Util.HashString(battleTag)] == true
 end)
 
 ----------------------------------------------------------------------
