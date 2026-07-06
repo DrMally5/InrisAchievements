@@ -115,13 +115,17 @@ Exalted("rep_ravenholdt","Master Assassin",      "Ravenholdt",      R.LEGENDARY,
 ----------------------------------------------------------------------
 -- More exploration
 ----------------------------------------------------------------------
+-- SEALED secret - see Core/Util.lua; the plaintext lives outside the repo.
 A{
-    id = "explore_oldironforge", name = "Beneath the Mountain",
-    description = "Find the abandoned halls of Old Ironforge.",
+    id = "explore_oldironforge", name = "Hidden Achievement", description = "",
+    teaser = "Beneath the Mountain",
+    teaserDesc = "The king sits above. History sleeps below.",
     category = "EXPLORATION", subcategory = "Hidden",
     rarity = R.RARE, trigger = "EXPLORE", hidden = true,
-    icon = "Interface\\Icons\\INV_Hammer_05",
-    conditions = { zones = { "Old Ironforge" } },
+    sealed = "95ef85e04fbfccce616fcce6237a0642ee9e139ceef440bca503d19cc886b949f515a691624199068c80f358b45f7a2c71c806e5f9f7776121e377255e788db56e12b878cb0dad6ce37abd32d9d24b16bda31b3a90e42c38dd3e4ce9f3624a38ade2",
+    conditions = {
+        matchers = { { h = "00dd00cf", w = "86deee479e7adf2e6b174fad0bf32597" } },
+    },
 }
 
 A{
