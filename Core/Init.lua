@@ -156,18 +156,6 @@ local function HandleSlash(msg)
     elseif cmd == "titles" then
         ns.TitlesUI:Toggle()
 
-    elseif cmd == "title" then
-        if rest == "" then
-            ns.TitlesUI:Show()
-        elseif rest:lower() == "clear" or rest:lower() == "none" then
-            ns.Titles:SetActive(nil)
-            Util.Print(L["TITLE_CLEARED"])
-        else
-            local set = ns.Titles:SetActiveByText(rest)
-            if set then Util.Print(string.format(L["TITLE_SET"], set))
-            else Util.Print(L["TITLE_LOCKED"]) end
-        end
-
     elseif cmd == "sync" then
         ns.Comm:BroadcastSummary(true)
         ns.Comm:Hello()

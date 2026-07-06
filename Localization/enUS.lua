@@ -97,7 +97,7 @@ L["TITLE_NONE_UNLOCKED"]  = "You haven't unlocked any titles yet. Titles come fr
 L["TITLE_SET"]            = "Title set to %s"
 L["TITLE_CLEARED"]        = "Title cleared."
 L["TITLE_LOCKED"]         = "You have not unlocked that title."
-L["SLASH_TITLE"]          = "/ia title <name|clear> - Set your displayed title"
+L["SLASH_TITLE"]          = "/ia titles - Pick your displayed title"
 
 ----------------------------------------------------------------------
 -- Inspect
