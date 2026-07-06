@@ -20,24 +20,95 @@ ns.Inspect = Inspect
 local frame
 local currentKey
 
+local IROW_H = 44   -- inspect list row height
+local INUM   = 7    -- visible rows
+
 ----------------------------------------------------------------------
--- Analyse a roster entry's completed list into stats + notable list.
+-- Analyse a roster entry's completed list: rarity tallies + a sorted list
+-- of the actual achievement defs (rarest first) for the scrollable view.
 ----------------------------------------------------------------------
 local function Analyze(entry)
     local byRarity = { 0, 0, 0, 0 }
-    local notable = {}
+    local list = {}
     for _, id in ipairs(entry.completed or {}) do
         local def = ns.GetAchievement(id)
         if def then
             byRarity[def.rarity] = (byRarity[def.rarity] or 0) + 1
-            if def.rarity >= ns.RARITY.EPIC then notable[#notable + 1] = def end
+            list[#list + 1] = def
         end
     end
-    table.sort(notable, function(a, b)
+    table.sort(list, function(a, b)
         if a.rarity ~= b.rarity then return a.rarity > b.rarity end
         return a.name < b.name
     end)
-    return byRarity, notable
+    return byRarity, list
+end
+
+----------------------------------------------------------------------
+-- One row of the scrollable achievement list (icon + name + desc + points).
+----------------------------------------------------------------------
+local function CreateInspectRow(parent)
+    local row = CreateFrame("Frame", nil, parent)
+    row:SetSize(360, IROW_H)
+
+    row.bg = row:CreateTexture(nil, "BACKGROUND")
+    row.bg:SetPoint("TOPLEFT", 0, -1); row.bg:SetPoint("BOTTOMRIGHT", 0, 1)
+    row.bg:SetColorTexture(0.09, 0.09, 0.11, 0.55)
+
+    row.stripe = row:CreateTexture(nil, "BORDER")
+    row.stripe:SetSize(3, IROW_H - 2)
+    row.stripe:SetPoint("TOPLEFT", 0, -1)
+
+    row.icon = row:CreateTexture(nil, "ARTWORK")
+    row.icon:SetSize(32, 32)
+    row.icon:SetPoint("LEFT", 9, 0)
+    row.icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
+
+    row.points = row:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    row.points:SetPoint("TOPRIGHT", -8, -6)
+    row.points:SetTextColor(1, 0.82, 0)
+
+    row.name = row:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    row.name:SetPoint("TOPLEFT", row.icon, "TOPRIGHT", 9, -1)
+    row.name:SetPoint("RIGHT", row.points, "LEFT", -6, 0)
+    row.name:SetJustifyH("LEFT")
+
+    row.desc = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    row.desc:SetPoint("TOPLEFT", row.name, "BOTTOMLEFT", 0, -2)
+    row.desc:SetPoint("RIGHT", -8, 0)
+    row.desc:SetJustifyH("LEFT")
+    row.desc:SetTextColor(0.78, 0.78, 0.78)
+    row.desc:SetMaxLines(1)
+    row.desc:SetWordWrap(false)
+
+    return row
+end
+
+----------------------------------------------------------------------
+-- Redraw the visible slice of the achievement list.
+----------------------------------------------------------------------
+local function UpdateInspectList()
+    if not frame or not frame.scroll then return end
+    local list = Inspect._list or {}
+    local scroll = frame.scroll
+    FauxScrollFrame_Update(scroll, #list, INUM, IROW_H)
+    local offset = FauxScrollFrame_GetOffset(scroll)
+    for i = 1, INUM do
+        local row = frame.rows[i]
+        local def = list[offset + i]
+        if def then
+            local c = Util.RarityColor(def.rarity)
+            row.icon:SetTexture(def.icon or ns.DEFAULT_ICON)
+            row.stripe:SetColorTexture(c[1], c[2], c[3], 0.9)
+            row.name:SetText(def.name)
+            row.name:SetTextColor(c[1], c[2], c[3])
+            row.desc:SetText(def.description or "")
+            row.points:SetText(def.points or "")
+            row:Show()
+        else
+            row:Hide()
+        end
+    end
 end
 
 ----------------------------------------------------------------------
@@ -45,7 +116,7 @@ end
 ----------------------------------------------------------------------
 local function BuildFrame()
     frame = CreateFrame("Frame", "InrisInspectFrame", UIParent, "BackdropTemplate")
-    frame:SetSize(360, 440)
+    frame:SetSize(400, 560)
     frame:SetPoint("CENTER", 280, 0)
     frame:SetFrameStrata("HIGH")
     frame:SetBackdrop({
@@ -86,32 +157,43 @@ local function BuildFrame()
     frame.rarityLine = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     frame.rarityLine:SetPoint("TOP", frame.completion, "BOTTOM", 0, -4)
 
-    -- Notable header + rows
-    frame.notableHeader = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    frame.notableHeader:SetPoint("TOPLEFT", 20, -170)
-    frame.notableHeader:SetText(L["INSPECT_HIGHEST"])
-    frame.notableRows = {}
-    for i = 1, 6 do
-        local fs = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-        fs:SetPoint("TOPLEFT", 28, -188 - (i - 1) * 16)
-        fs:SetJustifyH("LEFT")
-        frame.notableRows[i] = fs
+    -- Achievements header + a subtle divider
+    frame.listHeader = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    frame.listHeader:SetPoint("TOPLEFT", 22, -196)
+    frame.listHeader:SetText(L["INSPECT_HIGHEST"])
+
+    local div = frame:CreateTexture(nil, "ARTWORK")
+    div:SetColorTexture(1, 0.82, 0, 0.25)
+    div:SetPoint("TOPLEFT", 20, -214); div:SetPoint("TOPRIGHT", -20, -214)
+    div:SetHeight(1)
+
+    -- Scrollable achievement list
+    frame.scroll = CreateFrame("ScrollFrame", "InrisInspectScroll", frame, "FauxScrollFrameTemplate")
+    frame.scroll:SetPoint("TOPLEFT", 18, -222)
+    frame.scroll:SetSize(360, INUM * IROW_H)
+    frame.scroll:SetScript("OnVerticalScroll", function(self, offset)
+        FauxScrollFrame_OnVerticalScroll(self, offset, IROW_H, UpdateInspectList)
+    end)
+
+    frame.rows = {}
+    for i = 1, INUM do
+        local row = CreateInspectRow(frame)
+        if i == 1 then
+            row:SetPoint("TOPLEFT", frame.scroll, "TOPLEFT", 0, 0)
+        else
+            row:SetPoint("TOPLEFT", frame.rows[i - 1], "BOTTOMLEFT", 0, 0)
+        end
+        frame.rows[i] = row
     end
 
-    -- Recent header + rows
-    frame.recentHeader = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    frame.recentHeader:SetPoint("TOPLEFT", 20, -300)
-    frame.recentHeader:SetText(L["RECENTLY_EARNED"])
-    frame.recentRows = {}
-    for i = 1, 5 do
-        local fs = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-        fs:SetPoint("TOPLEFT", 28, -318 - (i - 1) * 16)
-        fs:SetJustifyH("LEFT")
-        frame.recentRows[i] = fs
-    end
+    frame:EnableMouseWheel(true)
+    frame:SetScript("OnMouseWheel", function(_, delta)
+        local sb = _G["InrisInspectScrollScrollBar"]
+        if sb then sb:SetValue(sb:GetValue() - delta * IROW_H) end
+    end)
 
     frame.status = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
-    frame.status:SetPoint("BOTTOM", 0, 18)
+    frame.status:SetPoint("BOTTOM", 0, 16)
 end
 
 ----------------------------------------------------------------------
@@ -144,7 +226,7 @@ local function Populate(entry)
     frame.completion:SetText(string.format("%s: %d / %d", L["COMPLETION"], entry.count or 0, total))
 
     if entry.completed then
-        local byRarity, notable = Analyze(entry)
+        local byRarity, list = Analyze(entry)
         frame.rarityLine:SetText(string.format(
             "%s %d   %s %d   %s %d   %s %d",
             Util.Colorize(L["RARITY_COMMON"],    Util.RarityColor(1)), byRarity[1],
@@ -152,30 +234,17 @@ local function Populate(entry)
             Util.Colorize(L["RARITY_EPIC"],      Util.RarityColor(3)), byRarity[3],
             Util.Colorize(L["RARITY_LEGENDARY"], Util.RarityColor(4)), byRarity[4]))
 
-        for i, fs in ipairs(frame.notableRows) do
-            local def = notable[i]
-            if def then
-                fs:SetText(Util.Colorize(def.name, Util.RarityColor(def.rarity)))
-            else
-                fs:SetText("")
-            end
-        end
-        frame.status:SetText("")
+        Inspect._list = list
+        FauxScrollFrame_SetOffset(frame.scroll, 0)
+        local sb = _G["InrisInspectScrollScrollBar"]
+        if sb then sb:SetValue(0) end
+        UpdateInspectList()
+        frame.status:SetText(#list == 0 and "No achievements earned yet." or "")
     else
         frame.rarityLine:SetText("")
-        for _, fs in ipairs(frame.notableRows) do fs:SetText("") end
+        Inspect._list = {}
+        UpdateInspectList()
         frame.status:SetText(string.format(L["INSPECT_REQUESTING"], entry.name or "?"))
-    end
-
-    -- Recent (available once a profile/full has arrived)
-    for i, fs in ipairs(frame.recentRows) do
-        local id = entry.recent and entry.recent[i]
-        local def = id and ns.GetAchievement(id)
-        if def then
-            fs:SetText(Util.Colorize(def.name, Util.RarityColor(def.rarity)))
-        else
-            fs:SetText("")
-        end
     end
 end
 
