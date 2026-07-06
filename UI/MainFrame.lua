@@ -865,11 +865,14 @@ function ns.LinkifyFlex(msg)
     local name = msg:match("just earned (.-) %(")
               or msg:match("just discovered a hidden achievement: (.+)!")
     if not name or name == "" then return msg end
-    if not flexNameIndex then
+    local def = flexNameIndex and flexNameIndex[name]
+    if not def then
+        -- (Re)build the name index - it can go stale after a sealed hidden
+        -- achievement is revealed under its real name.
         flexNameIndex = {}
         for _, d in ipairs(ns.Achievements) do flexNameIndex[d.name] = d end
+        def = flexNameIndex[name]
     end
-    local def = flexNameIndex[name]
     if not def then return msg end
     local s, e = msg:find(name, 1, true)   -- plain (non-pattern) find
     if not s then return msg end

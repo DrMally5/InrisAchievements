@@ -105,7 +105,7 @@ L["SLASH_TITLE"]          = "/ia titles - Pick your displayed title"
 L["INSPECT_MENU"]         = "View Achievements"
 L["INSPECT_NO_ADDON"]     = "%s does not have Inri's Achievements! installed."
 L["INSPECT_REQUESTING"]   = "Requesting achievements from %s..."
-L["INSPECT_HIGHEST"]      = "Notable Achievements"
+L["INSPECT_HIGHEST"]      = "Achievements"
 
 ----------------------------------------------------------------------
 -- Categories (mirrors keys in Definitions\Categories.lua)

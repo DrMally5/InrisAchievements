@@ -333,9 +333,17 @@ end)
 ----------------------------------------------------------------------
 Engine:RegisterTrigger("ITEM", function(def, p)
     local ids = def.conditions.itemIDs
-    if not ids or not GetItemCount then return false end
+    if not ids then return false end
     for _, itemID in ipairs(ids) do
-        if (GetItemCount(itemID, true) or 0) > 0 then return true end  -- true = include bank
+        -- Bags + bank. NOTE: GetItemCount does NOT count equipped items, so a
+        -- worn weapon (the usual case for a legendary!) is invisible to it...
+        if GetItemCount and (GetItemCount(itemID, true) or 0) > 0 then return true end
+        -- ...hence also scan the 19 equipped slots directly.
+        if GetInventoryItemID then
+            for slot = 1, 19 do
+                if GetInventoryItemID("player", slot) == itemID then return true end
+            end
+        end
     end
     return false
 end)
