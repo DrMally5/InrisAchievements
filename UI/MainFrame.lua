@@ -601,7 +601,7 @@ local function BuildFrame()
 
     -- Small version stamp, bottom-right corner (handy for bug reports).
     local ver = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
-    ver:SetPoint("BOTTOMRIGHT", -16, 14)
+    ver:SetPoint("BOTTOMLEFT", 16, 14)
     ver:SetText("v" .. ns.VERSION)
     ver:SetTextColor(0.5, 0.5, 0.5)
 
