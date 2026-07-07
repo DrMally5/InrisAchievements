@@ -63,10 +63,12 @@ Legend("leg_verog",    "Kolkar Warlord",     "Verog the Dervish",  R.COMMON, "In
 Legend("leg_hezrul",   "Blood of the Kolkar","Hezrul Bloodmark",   R.COMMON, "Interface\\Icons\\INV_Sword_04",              "The Barrens")   -- VERIFY
 
 ----------------------------------------------------------------------
--- Forsaken lands (Tirisfal & Silverpine)
+-- Forsaken lands. Subcategories are the ACTUAL zone names (not the region
+-- "Forsaken Lands") so "/ia here" surfaces them like every other zone.
 ----------------------------------------------------------------------
-Legend("leg_fellicent","Restless Spirit",    "Fellicent's Shade",  R.RARE,   "Interface\\Icons\\Spell_Shadow_ShadowWordPain", "Forsaken Lands")
-Legend("leg_maggoteye","Gnoll Punter",       "Maggot Eye",         R.COMMON, "Interface\\Icons\\INV_Misc_Bone_HumanSkull_01", "Forsaken Lands")
+Legend("leg_fellicent","Restless Spirit",    "Fellicent's Shade",  R.RARE,   "Interface\\Icons\\Spell_Shadow_ShadowWordPain", "Tirisfal Glades")
+Legend("leg_agamand",  "The Family Crypt",   "Devlin Agamand",     R.COMMON, "Interface\\Icons\\Spell_Shadow_RaiseDead",      "Tirisfal Glades")   -- VERIFY
+Legend("leg_maggoteye","Gnoll Punter",       "Maggot Eye",         R.COMMON, "Interface\\Icons\\INV_Misc_Bone_HumanSkull_01", "Silverpine Forest")
 -- Mangeclaw is actually the Dun Morogh bear (dwarf/gnome quest target); it was
 -- misfiled under Forsaken Lands originally. Lives here file-wise, but grouped
 -- and saga'd with Khaz Modan.
